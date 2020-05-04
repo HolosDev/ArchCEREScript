@@ -1,9 +1,8 @@
 module Data.ArchCERES.Type where
 
 
-import           Data.ByteString                ( ByteString )
-import qualified Data.Text                     as T
-import           Data.Text.Lazy                 ( Text )
+import           Data.ByteString.Short          ( ShortByteString )
+import           Data.Text                      ( Text )
 import           Data.IntMap                    ( IntMap )
 import           Data.Trie.Text                 ( Trie )
 import           Data.Vector                    ( Vector )
@@ -12,13 +11,14 @@ import           TextShow
 import           TextShow.Data.Vector
 
 
-type Operator = T.Text
-type Category = T.Text
+type Operator = Text
+type Category = Text
 -- TODO: Check there is obvious difference on performance between ByteString and Lazy Text
-type IHeader = ByteString
-type CHeader = ByteString
+type IHeader = ShortByteString
+type CHeader = ShortByteString
+type OHeader = ShortByteString
 
-type Branch = T.Text
+type Branch = Text
 type Priority = Int
 
 type Message = Text
@@ -27,7 +27,7 @@ type ID = Int
 type Str = Text
 
 type IIdx = Int
-type NIdx = T.Text
+type NIdx = Text
 
 type Name = Text
 type Time = Int
