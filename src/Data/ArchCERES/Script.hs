@@ -1,14 +1,30 @@
 module Data.ArchCERES.Script where
 
 
+import           Data.IntMap                    ( IntMap )
+
+
 import           Data.ArchCERES.Type
 import           Data.ArchCERES.VariablePosition
 
 
 ---------------- # ArchCEREScript # ----------------
 
--- TODO: Now, ArchCEREScript is List form, but would be Pseudo-Tree form
-type ArchCEREScript vp vi v vt co eis = [ArchCERES vp vi v vt co eis]
+data ArchCEREScript s vp vi v vt co eis
+  = SCase
+    -- Note: type of branchCondition should be :: s -> Int which s is :: (World, SI, Env)
+    { branchCondition :: ArchCEREScript s vp vi v vt co eis
+    -- TODO: Should decide that the result of branchScript would be applied to Env or not
+    -- NOTE: If an interpreter applies the result, the programmer should make it carefully
+    -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
+    , branchScripts :: IntMap (ArchCEREScript s vp vi v vt co eis)
+    , cNext :: ArchCEREScript s vp vi v vt co eis
+    }
+  | SSeq
+    { aInst :: ArchCERES vp vi v vt co eis
+    , cNext :: ArchCEREScript s vp vi v vt co eis
+    }
+  | SEnd
 
 data ArchCERES vp vi v vt co eis
   -- | No-Op
