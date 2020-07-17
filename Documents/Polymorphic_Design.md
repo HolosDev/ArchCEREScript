@@ -36,14 +36,14 @@ This is not good choice at performance aspect, because even it is already parsed
 
 ### Plugin-able Instruction Set
 
-```
+````haskell
 data CEREScript variablePosition value additionalInstructionSet
   = CRSAbc ...
   | CRSBcd ...
   | CRSCde ...
   | CRSExtended CHeader ...
   | CRSAdditional (additionalInstructionSet value variablePosition)
-```
+````
 
 * `value` would accept custom `Value` type of the new interpreter
 * `variablePosition` would accept custom variable storage structure of the new interpreter
@@ -53,7 +53,7 @@ Of course, `additionalInstructionSet` also may need the new type of `value` and 
 
 ### Design Example
 
-```
+````haskell
 data CEREScript vp v ais
   = CRSAbc
   | CRSBcd (vp v)
@@ -81,4 +81,5 @@ type CHeader = Text
 aCRS1, aCRS2 :: CEREScript VP1 (V1 VTS1 CustomType1 CustomType2) AIS
 aCRS1 = CRSAdditional (AISBcd (VPHere (VT1 Enum1)))
 aCRS2 = CRSBcd (VPX 1)
-```
+````
+
