@@ -83,3 +83,18 @@ aCRS1 = CRSAdditional (AISBcd (VPHere (VT1 Enum1)))
 aCRS2 = CRSBcd (VPX 1)
 ````
 
+## Issues
+
+### Should `v` be defined with more then one independent type?
+
+When the interpreter wants to handle more than one customized type, what should we do?
+Should ArchCEREScript provide more then one explicit data type parameter?
+Or the interpreter should provide those types as a single sum type?
+
+#### Pros
+
+* Could handle custom data types in a single container type
+
+#### Cons
+
+* Forces every required class to every custom data types
