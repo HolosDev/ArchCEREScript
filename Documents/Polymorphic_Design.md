@@ -69,9 +69,9 @@ data AIS vp v
   | AISExtended1 CHeader (vp v)
   | AISExtended2 CHeader (vp v) (vp v)
 
-data VTS1 = VTSInt | VTSStr | VTSCustom
-data V1 vts vt1 vt2 = VTInt Int | VTStr String | VT1 vt1 | VT2 vt2
 data VP1 v = VPX Int | VPY Text | VPHere v
+data VT1 = VTInt | VTStr | VTCustom
+data V1 vts vt1 vt2 = VInt Int | VStr String | V1 vt1 | V2 vt2
 
 data CustomType1 = Enum1 | Enum2
 data CustomType2 = CT2 { ct2i :: Int, ct2s :: String }
@@ -79,7 +79,7 @@ data CustomType2 = CT2 { ct2i :: Int, ct2s :: String }
 type CHeader = Text
 
 aCRS1, aCRS2 :: CEREScript VP1 (V1 VTS1 CustomType1 CustomType2) AIS
-aCRS1 = CRSAdditional (AISBcd (VPHere (VT1 Enum1)))
+aCRS1 = CRSAdditional (AISBcd (VPHere (V1 Enum1)))
 aCRS2 = CRSBcd (VPX 1)
 ````
 
