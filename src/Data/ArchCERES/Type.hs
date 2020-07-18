@@ -4,6 +4,8 @@ module Data.ArchCERES.Type where
 import           Data.ByteString.Short          ( ShortByteString )
 import           Data.Text                      ( Text )
 import           Data.IntMap                    ( IntMap )
+import qualified Data.IntMap.Strict            as SIM
+                                                ( IntMap )
 import           Data.Trie.Text                 ( Trie )
 import           Data.Vector                    ( Vector )
 
@@ -35,6 +37,8 @@ type Time = Int
 type Array a = Vector a
 type IMap a = IntMap a
 type NMap a = Trie a
+
+type SMap a = SIM.IntMap a
 
 
 data Atom = Atom deriving (Eq,Ord,Enum,Read)

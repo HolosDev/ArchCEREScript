@@ -1,9 +1,6 @@
 module Data.ArchCERES.Script where
 
 
-import           Data.IntMap                    ( IntMap )
-
-
 import           Data.ArchCERES.Type
 import           Data.ArchCERES.VariablePosition
 
@@ -11,17 +8,22 @@ import           Data.ArchCERES.VariablePosition
 ---------------- # ArchCEREScript # ----------------
 
 data ArchCEREScript s vp vi v vt co eis
-  = SCase
+  = SSeq
+    { aInst :: ArchCERES vp vi v vt co eis
+    , cNext :: ArchCEREScript s vp vi v vt co eis
+    }
+  | SLoop
+    { loopCondition :: ArchCEREScript s vp vi v vt co eis
+    , loopScript :: ArchCEREScript s vp vi v vt co eis
+    , cNext :: ArchCEREScript s vp vi v vt co eis
+    }
+  | SCase
     -- Note: type of branchCondition should be :: s -> Int which s is :: (World, SI, Env)
     { branchCondition :: ArchCEREScript s vp vi v vt co eis
     -- TODO: Should decide that the result of branchScript would be applied to Env or not
     -- NOTE: If an interpreter applies the result, the programmer should make it carefully
     -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
-    , branchScripts :: IntMap (ArchCEREScript s vp vi v vt co eis)
-    , cNext :: ArchCEREScript s vp vi v vt co eis
-    }
-  | SSeq
-    { aInst :: ArchCERES vp vi v vt co eis
+    , branchScripts :: SMap (ArchCEREScript s vp vi v vt co eis)
     , cNext :: ArchCEREScript s vp vi v vt co eis
     }
   | SEnd
