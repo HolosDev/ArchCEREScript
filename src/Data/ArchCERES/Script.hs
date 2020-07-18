@@ -31,20 +31,24 @@ data ArchCEREScript s vp vi v vt co eis
 data ArchCERES vp vi v vt co eis
   -- | No-Op
   = CRSNoop
+  -- | Clear Storage of vp
+  | CRSClearVariable    vp
   -- | Initialize Variable at VP@A with Value of VP@B
   | CRSInitVariable     (VariablePosition vp vi v) (VariablePosition vp vi v)
+  -- | Initialize Variable at Storage of vp with Value of VP@B
+  | CRSInitVariableAt   vp                         (VariablePosition vp vi v)
   -- | Check existence of Variable at VP@A and store the result to VP@B
   | CRSCheckVariable    (VariablePosition vp vi v) (VariablePosition vp vi v)
   -- | Delete Variable at VP@A
   | CRSDeleteVariable   (VariablePosition vp vi v)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue1     (VariablePosition vp vi v) co
+  | CRSModifyValue1     co                         (VariablePosition vp vi v)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue2     (VariablePosition vp vi v) (VariablePosition vp vi v) co
+  | CRSModifyValue2     co                         (VariablePosition vp vi v) (VariablePosition vp vi v)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B and VP@C
-  | CRSModifyValue3     (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) co
+  | CRSModifyValue3     co                         (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B, VP@C and VP@D
-  | CRSModifyValue4     (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) co
+  | CRSModifyValue4     co                         (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
   -- | Copy Value of VP@B to Variable at VP@A
   | CRSCopyValue        (VariablePosition vp vi v) (VariablePosition vp vi v)
   -- | Convert Value of VP@A as like as a given ValueType
