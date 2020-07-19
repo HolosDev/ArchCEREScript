@@ -26,6 +26,10 @@ data ArchCEREScript s vp vi vc vt co eis
     , branchScripts :: SMap (ArchCEREScript s vp vi vc vt co eis)
     , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
+  | SPar
+    { scripts :: SMap (ArchCEREScript s vp vi vc vt co eis)
+    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    }
   | SEnd
 
 data ArchCERES vp vi vc vt co eis
