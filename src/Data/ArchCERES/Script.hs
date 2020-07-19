@@ -7,98 +7,98 @@ import           Data.ArchCERES.VariablePosition
 
 ---------------- # ArchCEREScript # ----------------
 
-data ArchCEREScript s vp vi v vt co eis
+data ArchCEREScript s vp vi vc vt co eis
   = SSeq
-    { aInst :: ArchCERES vp vi v vt co eis
-    , cNext :: ArchCEREScript s vp vi v vt co eis
+    { aInst :: ArchCERES vp vi vc vt co eis
+    , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SLoop
-    { loopCondition :: ArchCEREScript s vp vi v vt co eis
-    , loopScript :: ArchCEREScript s vp vi v vt co eis
-    , cNext :: ArchCEREScript s vp vi v vt co eis
+    { loopCondition :: ArchCEREScript s vp vi vc vt co eis
+    , loopScript :: ArchCEREScript s vp vi vc vt co eis
+    , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SCase
     -- Note: type of branchCondition should be :: s -> Int which s is :: (World, SI, Env)
-    { branchCondition :: ArchCEREScript s vp vi v vt co eis
+    { branchCondition :: ArchCEREScript s vp vi vc vt co eis
     -- TODO: Should decide that the result of branchScript would be applied to Env or not
     -- NOTE: If an interpreter applies the result, the programmer should make it carefully
     -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
-    , branchScripts :: SMap (ArchCEREScript s vp vi v vt co eis)
-    , cNext :: ArchCEREScript s vp vi v vt co eis
+    , branchScripts :: SMap (ArchCEREScript s vp vi vc vt co eis)
+    , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SEnd
 
-data ArchCERES vp vi v vt co eis
+data ArchCERES vp vi vc vt co eis
   -- | No-Op
   = CRSNoop
   -- | Clear Storage of vp
   | CRSClearVariable    vp
   -- | Initialize Variable at VP@A with Value of VP@B
-  | CRSInitVariable     (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSInitVariable     (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Initialize Variable at Storage of vp with Value of VP@B
-  | CRSInitVariableAt   vp                         (VariablePosition vp vi v)
+  | CRSInitVariableAt   vp                         (VariablePosition vp vi vc)
   -- | Check existence of Variable at VP@A and store the result to VP@B
-  | CRSCheckVariable    (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSCheckVariable    (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Delete Variable at VP@A
-  | CRSDeleteVariable   (VariablePosition vp vi v)
+  | CRSDeleteVariable   (VariablePosition vp vi vc)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue1     co                         (VariablePosition vp vi v)
+  | CRSModifyValue1     co                         (VariablePosition vp vi vc)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue2     co                         (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSModifyValue2     co                         (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B and VP@C
-  | CRSModifyValue3     co                         (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSModifyValue3     co                         (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Modify Value of VP@A by CERESOperator with Value of VP@B, VP@C and VP@D
-  | CRSModifyValue4     co                         (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSModifyValue4     co                         (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Copy Value of VP@B to Variable at VP@A
-  | CRSCopyValue        (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSCopyValue        (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Convert Value of VP@A as like as a given ValueType
-  | CRSConvertValue     (VariablePosition vp vi v) vt
+  | CRSConvertValue     (VariablePosition vp vi vc) vt
   -- | Convert Value of VP@A as like as ValueType of VP@B
-  | CRSConvertValueBy   (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSConvertValueBy   (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Convert Value of VP@A with a given rule of VP@B
-  | CRSConvertValueWith (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSConvertValueWith (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Replace StrValue of VP@A with indicated Variables in the StrValue
-  | CRSReplaceText      (VariablePosition vp vi v)
+  | CRSReplaceText      (VariablePosition vp vi vc)
   -- | Replace StrValue of VP@A with indicated Variables in the StrValue and store the result to VP@B
-  | CRSReplaceTextTo    (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSReplaceTextTo    (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Replace StrValue of VP@B in StrValue of VP@A as StrValue of VP@C
-  | CRSReplaceTextBy    (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSReplaceTextBy    (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Replace StrValue of VP@B in StrValue of VP@A as StrValue of VP@C and store the result to VP@D
-  | CRSReplaceTextByTo  (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSReplaceTextByTo  (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Read & Parse StrValue of VP@A as PtrValue and store the result to VP@B
-  | CRSGetPointer       (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSGetPointer       (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Generate Random Value of VP@A as a ValueType
-  | CRSSetPointer       (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSSetPointer       (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Generate Random Value of VP@A as a given ValueType
-  | CRSRandom           (VariablePosition vp vi v) vt
+  | CRSRandom           (VariablePosition vp vi vc) vt
   -- | Generate Random Value of VP@A as a ValueType of VP@B
-  | CRSRandomBy         (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSRandomBy         (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Generate Random Value of VP@A as a given ValueType with parameters vpC, vpD, and vpE
-  | CRSRandomWith       (VariablePosition vp vi v) vt (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSRandomWith       (VariablePosition vp vi vc) vt (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Generate Random Value of VP@A as a ValueType of VP@B with parameters vpC, vpD, and vpE
-  | CRSRandomWithBy     (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSRandomWithBy     (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Read & Parse StrValue of VP@A as a script and store the script to VP@B
-  | CRSParseScript      (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSParseScript      (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Log a content of VP@B to VP@B
-  | CRSLog              (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSLog              (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To0
   | CRSTo0 CHeader
   -- | To1 passes one Value of VP@A
-  | CRSTo1 CHeader (VariablePosition vp vi v)
+  | CRSTo1 CHeader (VariablePosition vp vi vc)
   -- | To2 passes one Value of VP@A and VP@B
-  | CRSTo2 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo2 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To3 passes one Value of VP@A, VP@B and VP@C
-  | CRSTo3 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo3 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To4 passes one Value of VP@A, VP@B, VP@C and VP@D
-  | CRSTo4 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo4 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To5 passes one Value of VP@A, VP@B, VP@C, VP@D and VP@E
-  | CRSTo5 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo5 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To6 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E and VP@F
-  | CRSTo6 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo6 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To7 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F and VP@G
-  | CRSTo7 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo7 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
-  | CRSTo8 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | CRSTo8 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   -- | Ext0
-  | CRSExt (eis vp vi v vt co)
+  | CRSExt (eis vp vi vc vt co)
   deriving (Eq, Ord)

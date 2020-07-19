@@ -32,9 +32,9 @@ This is not good choice at performance aspect, because even it is already parsed
 
 ## ArchCEREScript: Archetype of CEREScript
 
-## Design
+### Design
 
-### Plugin-able Instruction Set
+#### Plugin-able Instruction Set
 
 ````haskell
 data CEREScript variablePosition value additionalInstructionSet
@@ -54,31 +54,31 @@ Of course, `additionalInstructionSet` also may need the new type of `value` and 
 ### Design Example
 
 ````haskell
-data CEREScript vp v ais
+data CEREScript vp vc ais
   = CRSAbc
-  | CRSBcd (vp v)
-  | CRSCde (vp v) (vp v)
-  | CRSExtended1 CHeader (vp v)
-  | CRSExtended2 CHeader (vp v) (vp v)
-  | CRSAdditional (ais vp v)
+  | CRSBcd (vp vc)
+  | CRSCde (vp vc) (vp vc)
+  | CRSExtended1 CHeader (vp vc)
+  | CRSExtended2 CHeader (vp vc) (vp vc)
+  | CRSAdditional (ais vp vc)
 
-data AIS vp v
+data AIS vp vc
   = AISAbc
-  | AISBcd (vp v)
-  | AISCde (vp v) (vp v)
-  | AISExtended1 CHeader (vp v)
-  | AISExtended2 CHeader (vp v) (vp v)
+  | AISBcd (vp vc)
+  | AISCde (vp vc) (vp vc)
+  | AISExtended1 CHeader (vp vc)
+  | AISExtended2 CHeader (vp vr) (vp vc)
 
-data VP1 v = VPX Int | VPY Text | VPHere v
+data VP1 vc = VPX Int | VPY Text | VPHere vc
 data VT1 = VTInt | VTStr | VTCustom
-data V1 vts vt1 vt2 = VInt Int | VStr String | V1 vt1 | V2 vt2
+data VC1 vt1 vt2 = VCInt Int | VCStr String | VCC1 vt1 | VCC2 vt2
 
 data CustomType1 = Enum1 | Enum2
 data CustomType2 = CT2 { ct2i :: Int, ct2s :: String }
 
 type CHeader = Text
 
-aCRS1, aCRS2 :: CEREScript VP1 (V1 VTS1 CustomType1 CustomType2) AIS
+aCRS1, aCRS2 :: CEREScript VP1 (VC1 VTS1 CustomType1 CustomType2) AIS
 aCRS1 = CRSAdditional (AISBcd (VPHere (V1 Enum1)))
 aCRS2 = CRSBcd (VPX 1)
 ````
