@@ -38,12 +38,12 @@ library
       Paths_ArchCEREScript
   hs-source-dirs:
       src
-      test
   default-extensions: OverloadedStrings
   build-depends:
       base >=4.7 && <5
     , bytestring
     , containers
+    , megaparsec
     , text
     , text-show
     , text-show-instances
@@ -70,6 +70,7 @@ test-suite Test-Implementation
     , bytestring
     , call-stack
     , containers
+    , megaparsec
     , silently
     , test-framework
     , test-framework-hunit
@@ -101,6 +102,7 @@ test-suite Test-Spec
     , bytestring
     , call-stack
     , containers
+    , megaparsec
     , silently
     , test-framework
     , test-framework-hunit

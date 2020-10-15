@@ -21,6 +21,7 @@ dependencies:
 - text-show-instances
 - text-trie
 - vector
+- megaparsec
 
 default-extensions:
 - OverloadedStrings
