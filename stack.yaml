@@ -1,7 +1,8 @@
-resolver: lts-14.27
+resolver: lts-16.16
 
 packages:
 - .
 
 extra-deps:
-- text-trie-0.2.5.0
+- github: QuietJoon/text-trie
+  commit: c6a4be208c112344b6fab2872f2efc222234c557
