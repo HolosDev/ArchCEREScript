@@ -33,7 +33,8 @@ library
       Data.ArchCERES.Type
       Data.ArchCERES.Util
       Data.ArchCERES.VariablePosition
-      Data.CEREScriptI1
+      Parser.ArchCERES
+      Parser.ArchCERES.Type
   other-modules:
       Paths_ArchCEREScript
   hs-source-dirs:
