@@ -7,4 +7,4 @@ import           Data.ArchCERES.Type
 ---------------- # VariablePosition # ----------------
 
 -- NOTE: This fixes shape of VariablePosition and VariableIndex
-data VariablePosition vp vi v = VP vp (vi v) deriving (Eq, Ord)
+data VariablePosition vp vi vc = VP vp (vi vc) deriving (Eq, Ord)

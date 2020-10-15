@@ -12,17 +12,17 @@ import           Data.ArchCERES.VariablePosition
 type CEREScriptE1 = ArchCERES VP1 VI1 V1 VT1 CO1 EIS
 
 -- NOTE: Have five extended instructions
-data EIS vp vi v vt vo
+data EIS vp vi vc vt vo
   = EISAbc
-  | EISBcd (VariablePosition vp vi v)
-  | EISCde (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | EISBcd (VariablePosition vp vi vc)
+  | EISCde (VariablePosition vp vi vc) (VariablePosition vp vi vc)
   | EISExtended0 CHeader
-  | EISExtended1 CHeader (VariablePosition vp vi v)
-  | EISExtended2 CHeader (VariablePosition vp vi v) (VariablePosition vp vi v)
+  | EISExtended1 CHeader (VariablePosition vp vi vc)
+  | EISExtended2 CHeader (VariablePosition vp vi vc) (VariablePosition vp vi vc)
 
 -- NOTE: Have only
 data VP1 = AtMap | AtTable | AtHere
-data VI1 v = VI1I IIdx | VI1N NIdx | VI1V v
+data VI1 vc = VI1I IIdx | VI1N NIdx | VI1V vc
 -- NOTE: Have two custom type
 data VT1 = VTInt | VTStr | VTCustom1 | VTCustom2
 data V1 = VInt Int | VStr String | V1 CustomData1 | V2 CustomData2
