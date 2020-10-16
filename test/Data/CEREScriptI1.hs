@@ -9,7 +9,7 @@ import           Data.ArchCERES.Type
 import           Data.ArchCERES.VariablePosition
 
 
-type CEREScriptE1 = ArchCERES VP1 VI1 V1 VT1 CO1 EIS
+type CEREScriptE1 = ArchCERES VP1 VI1 V1 VT1 CO1 (EIS VP1 VI1 V1 VT1 CO1)
 
 -- NOTE: Have five extended instructions
 data EIS vp vi vc vt vo

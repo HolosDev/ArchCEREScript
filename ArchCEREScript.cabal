@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 26ba1e68ddffb71d5999a3911e20f8359a212426ee159b96c31dc434acfc4b17
+-- hash: 7fe5e66fac7919c3f5f959f1d56620104d5200fe3253a1ca5bc9906c43c10594
 
 name:           ArchCEREScript
 version:        0.0.2.0

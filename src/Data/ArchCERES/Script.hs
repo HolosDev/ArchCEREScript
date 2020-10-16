@@ -106,5 +106,5 @@ data ArchCERES vp vi vc vt co eis
   -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
   | CRSToList CHeader [VariablePosition vp vi vc]
   -- | Ext0
-  | CRSExt (eis vp vi vc vt co)
+  | CRSExt eis
   deriving (Eq, Ord)
