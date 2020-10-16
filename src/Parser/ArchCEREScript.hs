@@ -20,7 +20,7 @@ parseControlInstruction parsers = do
  where
   parseSHaveNext = do
     partACS <- choice [parseSSeq, parseSSeqs, parseSLoop, parseSCase, parseSPar]
-    void (char '>')
+    void (string ">\n")
     acsNext <- parseArchCEREScript parsers
     return $ partACS acsNext
   parseSSeq = do
