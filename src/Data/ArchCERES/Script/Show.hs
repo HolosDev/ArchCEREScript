@@ -10,6 +10,18 @@ import Data.ArchCERES.Util
 import Data.ArchCERES.VariablePosition
 
 
+
+instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript s vp vi v vt co eis) where
+  show = toString . showb
+
+instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCEREScript s vp vi v vt co eis) where
+  showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
+  showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
+  showb (SLoop loopCondition loopScript cNext) = fromLazyText "SLoop<" <> showb loopCondition <> singleton ',' <> showb loopScript <> fromLazyText ">\n" <> showb cNext
+  showb (SCase branchCondition branchScripts cNext) = fromLazyText "SCase<" <> showb branchCondition <> singleton ',' <> undefined branchScripts <> fromLazyText ">\n" <> showb cNext
+  showb (SPar scripts cNext) = fromLazyText "SPar<" <> undefined scripts <> fromLazyText ">\n" <> showb cNext
+  showb SEnd = fromLazyText "SEnd."
+
 instance (TextShow vp, TextShow (vi v)) => Show (VariablePosition vp vi v) where
   show = toString . showb
 
