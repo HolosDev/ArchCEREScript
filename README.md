@@ -12,6 +12,13 @@ Provide the common and flexible structure for CEREScript variants.
 Only provides framework, but not work by itself.
 Also provides common components for making CEREscript variants
 
+## How to use ArchCEREScript
+
+### How to use ArchCEREScript Parser
+
+ArchCEREScript Parser also not work independently.
+When you define AnCEREScript upon ArchCEREScript, you may need to define `parseAnCEREScript` as like as `parseArchCEREScript parseVariablePlace parseVariableIndex parseValueContainer ...`
+
 ## Variants of CEREScript
 
 * CEREScript-SuperSet
