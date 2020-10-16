@@ -15,7 +15,7 @@ parseArchCEREScript = parseControlInstruction
 
 parseControlInstruction :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
 parseControlInstruction parsers = do
-  void (char 'C')
+  void (char 'S')
   choice [ parseSHaveNext, parseSEnd ]
  where
   parseSHaveNext = do
