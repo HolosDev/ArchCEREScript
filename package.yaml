@@ -17,6 +17,7 @@ dependencies:
 - bytestring
 - containers
 - text
+- text-short
 - text-show
 - text-show-instances
 - text-trie

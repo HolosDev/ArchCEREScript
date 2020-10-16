@@ -3,6 +3,7 @@ module Data.ArchCERES.Util where
 
 import Data.Text (Text)
 import TextShow
+import TextShow.Data.ShortText ()
 
 import Data.ArchCERES.Type
 
