@@ -36,6 +36,7 @@ library
       Parser.ArchCERES
       Parser.ArchCERES.Type
       Parser.ArchCERES.VariablePosition
+      Parser.Util
   other-modules:
       Paths_ArchCEREScript
   hs-source-dirs:
