@@ -12,6 +12,10 @@ data ArchCEREScript s vp vi vc vt co eis
     { aInst :: ArchCERES vp vi vc vt co eis
     , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
+  | SSeqs
+    { instList :: [ArchCERES vp vi vc vt co eis]
+    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    }
   | SLoop
     { loopCondition :: ArchCEREScript s vp vi vc vt co eis
     , loopScript :: ArchCEREScript s vp vi vc vt co eis
