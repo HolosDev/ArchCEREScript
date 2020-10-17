@@ -4,6 +4,7 @@ module Data.ArchCEREScript.Script.Show where
 import TextShow ()
 import TextShow as TS
 
+import Data.ArchCEREScript.Data.Show as ACS
 import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.Type
 import Data.ArchCEREScript.Util
@@ -11,27 +12,27 @@ import Data.ArchCEREScript.VariablePosition
 
 
 
-instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript s vp vi v vt co eis) where
+instance (TextShow vp, TextShow (vi vc), TextShow vc, TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript s vp vi vc vt co eis) where
   show = toString . showb
 
-instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCEREScript s vp vi v vt co eis) where
+instance (TextShow vp, TextShow (vi vc), TextShow vc, TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCEREScript s vp vi vc vt co eis) where
   showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
   showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
   showb (SLoop loopCondition loopScript cNext) = fromLazyText "SLoop<" <> showb loopCondition <> singleton ',' <> showb loopScript <> fromLazyText ">\n" <> showb cNext
-  showb (SCase branchCondition branchScripts cNext) = fromLazyText "SCase<" <> showb branchCondition <> singleton ',' <> undefined branchScripts <> fromLazyText ">\n" <> showb cNext
-  showb (SPar scripts cNext) = fromLazyText "SPar<" <> undefined scripts <> fromLazyText ">\n" <> showb cNext
+  showb (SCase branchCondition branchScripts cNext) = fromLazyText "SCase<" <> showb branchCondition <> singleton ',' <> showb branchScripts <> fromLazyText ">\n" <> showb cNext
+  showb (SPar scripts cNext) = fromLazyText "SPar<" <> ACS.showbList scripts <> fromLazyText ">\n" <> showb cNext
   showb SEnd = fromLazyText "SEnd."
 
-instance (TextShow vp, TextShow (vi v)) => Show (VariablePosition vp vi v) where
+instance (TextShow vp, TextShow (vi vc)) => Show (VariablePosition vp vi vc) where
   show = toString . showb
 
-instance (TextShow vp, TextShow (vi v)) => TextShow (VariablePosition vp vi v) where
+instance (TextShow vp, TextShow (vi vc)) => TextShow (VariablePosition vp vi vc) where
   showb (VP vPlace vIndex) = showb vPlace <> TS.singleton '[' <> showb vIndex <> TS.singleton ']'
 
-instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => Show (ArchCERES vp vi v vt co eis) where
+instance (TextShow vp, TextShow (vi vc), TextShow vt, TextShow co, TextShow eis) => Show (ArchCERES vp vi vc vt co eis) where
   show = toString . showb
 
-instance (TextShow vp, TextShow (vi v), TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCERES vp vi v vt co eis) where
+instance (TextShow vp, TextShow (vi vc), TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCERES vp vi vc vt co eis) where
   showb CRSNoop = fromLazyText "Noop"
   showb (CRSInitVariable vpA vpB) =
     showbCS2 "InitVariable" vpA vpB

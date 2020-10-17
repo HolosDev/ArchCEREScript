@@ -27,11 +27,11 @@ data ArchCEREScript s vp vi vc vt co eis
     -- TODO: Should decide that the result of branchScript would be applied to Env or not
     -- NOTE: If an interpreter applies the result, the programmer should make it carefully
     -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
-    , branchScripts :: SMap (ArchCEREScript s vp vi vc vt co eis)
+    , branchScripts :: VMap vc (ArchCEREScript s vp vi vc vt co eis)
     , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SPar
-    { scripts :: SMap (ArchCEREScript s vp vi vc vt co eis)
+    { scripts :: [ArchCEREScript s vp vi vc vt co eis]
     , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SEnd

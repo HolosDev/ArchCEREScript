@@ -10,12 +10,12 @@ import Parser.ArchCEREScript.Type
 import Parser.Util
 
 
-parseArchCEREScript :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
+parseArchCEREScript :: Ord vc => (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
 parseArchCEREScript = parseControlInstruction
   -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
-parseControlInstruction :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
-parseControlInstruction parsers = do
+parseControlInstruction :: Ord vc => (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
+parseControlInstruction parsers@(_,_,parseVC,_,_,_) = do
   void (char 'S')
   choice [ parseSHaveNext, parseSEnd ]
  where
@@ -42,11 +42,11 @@ parseControlInstruction parsers = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
     void (string ",")
-    cases <- parseDefaultSMap (parseArchCEREScript parsers)
+    cases <- parseDefaultVMap parseVC (parseArchCEREScript parsers)
     return $ SCase branchCondition cases
   parseSPar = do
     void (string "Par<")
-    pars <- parseDefaultSMap (parseArchCEREScript parsers)
+    pars <- parseList' (parseArchCEREScript parsers)
     return $ SPar pars
   parseSEnd = do
     string "End."
