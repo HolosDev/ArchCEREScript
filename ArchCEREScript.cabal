@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4295a0cab589a277c6c6ca1eac70b50c3a8b8c7101d5e8387673405de80acca1
+-- hash: 5bb25bd95c880fa909467d6df23fb64c2b9ed0b1b4f22a8eaa329b4c7331010a
 
 name:           ArchCEREScript
 version:        0.0.2.0
@@ -27,19 +27,19 @@ source-repository head
 
 library
   exposed-modules:
+      Data.ArchCERES.Data.Show
       Data.ArchCERES.Script
       Data.ArchCERES.Script.Show
       Data.ArchCERES.Tracker
       Data.ArchCERES.Type
       Data.ArchCERES.Util
       Data.ArchCERES.VariablePosition
-      Nothing
       Parser.ArchCERES.Type
       Parser.ArchCERES.VariablePosition
       Parser.ArchCEREScript
       Parser.Util
   other-modules:
-      Paths_ArchCEREScript
+      Nothing
   hs-source-dirs:
       src
   default-extensions: OverloadedStrings
