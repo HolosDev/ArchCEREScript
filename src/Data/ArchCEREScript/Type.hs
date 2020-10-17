@@ -1,9 +1,9 @@
 module Data.ArchCEREScript.Type where
 
 import Data.IntMap (IntMap)
-import qualified Data.IntMap.Strict as SIM (
-  IntMap,
- )
+import Data.IntMap.Strict as SIM
+import Data.Map (Map)
+import Data.Map.Strict as SM
 import Data.Text (Text)
 import Data.Text.Short (ShortText)
 import Data.Trie.Text (Trie)
@@ -39,6 +39,7 @@ type IMap a = IntMap a
 type NMap a = Trie a
 
 type SMap a = SIM.IntMap a
+type VMap vc a = SM.Map vc a
 
 data Atom = Atom deriving (Eq, Ord, Enum, Read)
 
