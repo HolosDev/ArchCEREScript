@@ -30,7 +30,7 @@ parseControlInstruction parsers = do
     return $ SSeq acs
   parseSSeqs = do
     void (string "Seqs<")
-    acsList <- parseListWithBy' (parseArchCERES parsers) ',' ']'
+    acsList <- parseList' (parseArchCERES parsers)
     return $ SSeqs acsList
   parseSLoop = do
     void (string "Loop<")
@@ -41,12 +41,12 @@ parseControlInstruction parsers = do
   parseSCase = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
-    void (string ",[")
-    cases <- parseSMapWithBy' (parseArchCEREScript parsers) ',' '|' ']'
+    void (string ",")
+    cases <- parseDefaultSMap (parseArchCEREScript parsers)
     return $ SCase branchCondition cases
   parseSPar = do
-    void (string "Par<[")
-    pars <- parseSMapWithBy' (parseArchCEREScript parsers) ',' '|' ']'
+    void (string "Par<")
+    pars <- parseDefaultSMap (parseArchCEREScript parsers)
     return $ SPar pars
   parseSEnd = do
     string "End."

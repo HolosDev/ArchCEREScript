@@ -2,42 +2,150 @@ module Parser.Util where
 
 
 import Control.Monad (void)
+import Data.IntMap.Strict as IM
 import Text.Megaparsec
 import Text.Megaparsec.Char
+import qualified Text.Megaparsec.Char.Lexer as L
+
+import Debug.Trace
 
 import Data.ArchCEREScript.Type
 import Parser.ArchCEREScript.Type
 
 
-parseAWrapped :: Parser a -> Char -> Char -> Parser a
-parseAWrapped parseKernel aOpeningChar aClosingChar = do
+parseAWrapped :: Parser a -> ScriptSource -> ScriptSource -> Parser a
+parseAWrapped parseKernel opening closing = do
+  void (string opening)
+  k <- parseKernel
+  void (string closing)
+  return k
+
+parseAWrapped' :: Parser a -> Char -> Char -> Parser a
+parseAWrapped' parseKernel aOpeningChar aClosingChar = do
   void (char aOpeningChar)
   k <- parseKernel
   void (char aClosingChar)
   return k
 
 parseAngleWrapped :: Parser a -> Parser a
-parseAngleWrapped parseKernel = parseAWrapped parseKernel '<' '>'
+parseAngleWrapped parseKernel = parseAWrapped' parseKernel '<' '>'
 parseRoundWrapped :: Parser a -> Parser a
-parseRoundWrapped parseKernel = parseAWrapped parseKernel '(' ')'
+parseRoundWrapped parseKernel = parseAWrapped' parseKernel '(' ')'
 parseCurlyWrapped :: Parser a -> Parser a
-parseCurlyWrapped parseKernel = parseAWrapped parseKernel '{' '}'
+parseCurlyWrapped parseKernel = parseAWrapped' parseKernel '{' '}'
 parseSquareWrapped :: Parser a -> Parser a
-parseSquareWrapped parseKernel = parseAWrapped parseKernel '[' ']'
+parseSquareWrapped parseKernel = parseAWrapped' parseKernel '[' ']'
 
-parseListWithBy :: Parser a -> ScriptSource -> ScriptSource -> Parser [a]
-parseListWithBy parseValue delimiter closing = do
-  undefined
+parseListWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> Parser [a]
+parseListWithBy parseValue opening delimiter closing = do
+  void (string opening)
+  vList <- parseListKernel parseValue (void (string delimiter))
+  void (string closing)
+  return vList
 
-parseListWithBy' :: Parser a -> Char -> Char -> Parser [a]
-parseListWithBy' parseValue delimiter closing = do
-  undefined
+parseListWithBy' :: Parser a -> Char -> Char -> Char -> Parser [a]
+parseListWithBy' parseValue opening delimiter closing= do
+  void (char opening)
+  vList <- parseListKernel parseValue (void (char delimiter))
+  void (char closing)
+  return vList
 
-parseSMapWithBy :: Parser idx -> Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (SMap a)
-parseSMapWithBy parseIdx parseValue delimiter inter closing = do
-  undefined
+parseListWith :: Parser a -> ScriptSource -> Parser [a]
+parseListWith parseValue delimiter = do
+  vList <- parseSquareWrapped (parseListKernel parseValue (void (string delimiter)))
+  return vList
 
-parseSMapWithBy' :: Parser idx -> Parser a -> Char -> Char -> Char -> Parser (SMap a)
-parseSMapWithBy' parseIdx parseValue delimiter inter closing = do
-  undefined
+parseListWith' :: Parser a -> Char -> Parser [a]
+parseListWith' parseValue delimiter = do
+  vList <- parseSquareWrapped (parseListKernel parseValue (void (char delimiter)))
+  return vList
 
+parseList :: Parser a -> Parser [a]
+parseList parseValue = do
+  vList <- parseSquareWrapped (parseListKernel parseValue (void (string "::")))
+  return vList
+
+parseList' :: Parser a -> Parser [a]
+parseList' parseValue = do
+  vList <- parseSquareWrapped (parseListKernel parseValue (void (char ',')))
+  return vList
+
+parseListKernel :: Parser a -> Parser d -> Parser [a]
+parseListKernel parseValue parseDelimiter = do
+  mV <- optional parseValue
+  maybe (return []) (\v -> fmap (v:) parseListKernelSub) mV
+ where
+  parseListKernelSub = do
+    mV <- optional parseValueWithDelimiter
+    maybe (return []) (\v -> fmap (v:) parseListKernelSub ) mV
+  parseValueWithDelimiter = do
+    void parseDelimiter
+    parseValue
+
+parseSMapWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (SMap a)
+parseSMapWithBy parseValue opening delimiter inter closing = do
+  void (string opening)
+  kvList <- parseListKernel (parseKVBy parseSignedInt parseValue inter) (string delimiter)
+  void (string closing)
+  return . IM.fromList $ kvList
+
+parseSMapWithBy' :: Parser a -> Char -> Char -> Char -> Char -> Parser (SMap a)
+parseSMapWithBy' parseValue opening delimiter inter closing = do
+  void (char opening)
+  kvList <- parseListKernel (parseKVBy' parseSignedInt parseValue inter) (char delimiter)
+  void (char closing)
+  return . IM.fromList $ kvList
+
+parseSMapWith :: Parser a -> ScriptSource -> ScriptSource -> Parser (SMap a)
+parseSMapWith parseValue delimiter inter = do
+  kvList <- parseSquareWrapped (parseListKernel (parseKVBy parseSignedInt parseValue inter) (string delimiter))
+  return . IM.fromList $ kvList
+
+parseSMapWith' :: Parser a -> Char -> Char -> Parser (SMap a)
+parseSMapWith' parseValue delimiter inter = do
+  kvList <- parseSquareWrapped (parseListKernel (parseKVBy' parseSignedInt parseValue inter) (char delimiter))
+  return . IM.fromList $ kvList
+
+parseDefaultSMap :: Parser a -> Parser (SMap a)
+parseDefaultSMap parseValue = do
+  kvList <- parseSquareWrapped (parseListKernel (parseKV parseSignedInt parseValue) (char ','))
+  return . IM.fromList $ kvList
+
+parseKVBy :: Parser idx -> Parser v -> ScriptSource -> Parser (idx, v)
+parseKVBy parseIdx parseValue inter = parseRoundWrapped (parseKVKernelBy parseIdx parseValue inter)
+
+parseKVBy' :: Parser idx -> Parser v -> Char -> Parser (idx, v)
+parseKVBy' parseIdx parseValue inter = parseRoundWrapped (parseKVKernelBy' parseIdx parseValue inter)
+
+parseKV :: Parser idx -> Parser v -> Parser (idx, v)
+parseKV parseIdx parseValue = parseRoundWrapped (parseKVKernel parseIdx parseValue)
+
+parseKVKernelBy :: Parser idx -> Parser v -> ScriptSource -> Parser (idx, v)
+parseKVKernelBy parseIdx parseValue inter = do
+  idx <- parseIdx
+  void (string inter)
+  v <- parseValue
+  return (idx,v)
+
+parseKVKernelBy' :: Parser idx -> Parser v -> Char -> Parser (idx, v)
+parseKVKernelBy' parseIdx parseValue inter = do
+  idx <- parseIdx
+  void (char inter)
+  v <- parseValue
+  return (idx,v)
+
+parseKVKernel :: Parser idx -> Parser v -> Parser (idx, v)
+parseKVKernel parseIdx parseValue = do
+  idx <- parseIdx
+  void (char ',')
+  v <- parseValue
+  return (idx,v)
+
+lexeme :: Parser a -> Parser a
+lexeme = L.lexeme space
+
+parseInt :: Parser Int
+parseInt = lexeme L.decimal
+
+parseSignedInt :: Parser Int
+parseSignedInt = L.signed space parseInt
