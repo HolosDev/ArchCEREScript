@@ -26,18 +26,18 @@ parseSquareWrapped :: Parser a -> Parser a
 parseSquareWrapped parseKernel = parseAWrapped parseKernel '[' ']'
 
 parseListWithBy :: Parser a -> ScriptSource -> ScriptSource -> Parser [a]
-parseListWithBy parseKernel delimiter closing = do
+parseListWithBy parseValue delimiter closing = do
   undefined
 
 parseListWithBy' :: Parser a -> Char -> Char -> Parser [a]
-parseListWithBy' parseKernel delimiter closing = do
+parseListWithBy' parseValue delimiter closing = do
   undefined
 
-parseSMapWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (SMap a)
-parseSMapWithBy parseKernel delimiter inter closing = do
+parseSMapWithBy :: Parser idx -> Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (SMap a)
+parseSMapWithBy parseIdx parseValue delimiter inter closing = do
   undefined
 
-parseSMapWithBy' :: Parser a -> Char -> Char -> Char -> Parser (SMap a)
-parseSMapWithBy' parseKernel delimiter inter closing = do
+parseSMapWithBy' :: Parser idx -> Parser a -> Char -> Char -> Char -> Parser (SMap a)
+parseSMapWithBy' parseIdx parseValue delimiter inter closing = do
   undefined
 
