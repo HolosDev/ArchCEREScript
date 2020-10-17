@@ -6,10 +6,8 @@ import TextShow as TS
 
 import Data.ArchCEREScript.Data.Show as ACS
 import Data.ArchCEREScript.Script
-import Data.ArchCEREScript.Type
 import Data.ArchCEREScript.Util
 import Data.ArchCEREScript.VariablePosition
-
 
 
 instance (TextShow vp, TextShow (vi vc), TextShow vc, TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript s vp vi vc vt co eis) where

@@ -3,7 +3,6 @@ module Data.ArchCEREScript.Data.Show where
 
 import Data.IntMap.Strict as SIM
 import Data.Map.Strict as SM
-import Data.Maybe
 import Data.List
 
 import TextShow ()

@@ -8,7 +8,6 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
-import Debug.Trace
 
 import Data.ArchCEREScript.Type
 import Parser.ArchCEREScript.Type
