@@ -29,4 +29,4 @@ showbList :: TextShow a => [a] -> Builder
 showbList aList = TS.singleton '[' <> mapInternal <> TS.singleton ']'
  where
   mapInternal :: Builder
-  mapInternal = foldr1 (<>) . intersperse (fromLazyText "|") . Prelude.map showb $ aList
+  mapInternal = foldr1 (<>) . intersperse (fromLazyText ",") . Prelude.map showb $ aList
