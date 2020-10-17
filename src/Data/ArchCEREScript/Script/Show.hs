@@ -96,4 +96,6 @@ instance (TextShow vp, TextShow (vi vc), TextShow vt, TextShow co, TextShow eis)
     showbCSC7 "To7" cH vpA vpB vpC vpD vpE vpF vpG
   showb (CRSTo8 cH vpA vpB vpC vpD vpE vpF vpG vpH) =
     showbCSC8 "To8" cH vpA vpB vpC vpD vpE vpF vpG vpH
+  showb (CRSToList cH vpList) =
+    fromLazyText "ToList" <> showb cH <> TS.showbList vpList
   showb (CRSExt ei) = showb ei
