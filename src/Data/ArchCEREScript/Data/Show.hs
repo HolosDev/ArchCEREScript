@@ -3,6 +3,7 @@ module Data.ArchCEREScript.Data.Show where
 
 import Data.IntMap.Strict as IM
 import Data.Maybe
+import Data.List
 
 import TextShow ()
 import TextShow as TS
@@ -21,3 +22,9 @@ instance TextShow a => TextShow (IntMap a) where
       (hk, hv) = fromJust . lookupMin $ im
       renderKV k v = TS.singleton '(' <> showb k <> TS.singleton '|' <> showb v <> TS.singleton ')'
       base = renderKV hk hv
+
+showbList :: TextShow a => [a] -> Builder
+showbList aList = TS.singleton '[' <> mapInternal <> TS.singleton ']'
+ where
+  mapInternal :: Builder
+  mapInternal = foldr1 (<>) . intersperse (fromLazyText "|") . Prelude.map showb $ aList
