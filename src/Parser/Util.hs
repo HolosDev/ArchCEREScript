@@ -5,8 +5,8 @@ import Control.Monad (void)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
-import Data.ArchCERES.Type
-import Parser.ArchCERES.Type
+import Data.ArchCEREScript.Type
+import Parser.ArchCEREScript.Type
 
 
 parseAWrapped :: Parser a -> Char -> Char -> Parser a

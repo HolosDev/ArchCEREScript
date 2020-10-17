@@ -4,9 +4,9 @@ module Data.CEREScriptI1 where
 import           Data.Text                      ( Text )
 
 
-import           Data.ArchCERES.Script
-import           Data.ArchCERES.Type
-import           Data.ArchCERES.VariablePosition
+import           Data.ArchCEREScript.Script
+import           Data.ArchCEREScript.Type
+import           Data.ArchCEREScript.VariablePosition
 
 
 type CEREScriptE1 = ArchCERES VP1 VI1 V1 VT1 CO1 (EIS VP1 VI1 V1 VT1 CO1)

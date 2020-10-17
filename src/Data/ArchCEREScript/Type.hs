@@ -1,4 +1,4 @@
-module Data.ArchCERES.Type where
+module Data.ArchCEREScript.Type where
 
 import Data.IntMap (IntMap)
 import qualified Data.IntMap.Strict as SIM (

@@ -1,8 +1,8 @@
-module Data.ArchCERES.Script where
+module Data.ArchCEREScript.Script where
 
 
-import           Data.ArchCERES.Type
-import           Data.ArchCERES.VariablePosition
+import           Data.ArchCEREScript.Type
+import           Data.ArchCEREScript.VariablePosition
 
 
 ---------------- # ArchCEREScript # ----------------

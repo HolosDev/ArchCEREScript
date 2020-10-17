@@ -1,11 +1,11 @@
-module Data.ArchCERES.Util where
+module Data.ArchCEREScript.Util where
 
 
 import Data.Text (Text)
 import TextShow
 import TextShow.Data.ShortText ()
 
-import Data.ArchCERES.Type
+import Data.ArchCEREScript.Type
 
 
 showb1 :: TextShow a => Text -> a -> Builder

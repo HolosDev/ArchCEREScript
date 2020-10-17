@@ -1,13 +1,13 @@
-module Data.ArchCERES.Script.Show where
+module Data.ArchCEREScript.Script.Show where
 
 
 import TextShow ()
 import TextShow as TS
 
-import Data.ArchCERES.Script
-import Data.ArchCERES.Type
-import Data.ArchCERES.Util
-import Data.ArchCERES.VariablePosition
+import Data.ArchCEREScript.Script
+import Data.ArchCEREScript.Type
+import Data.ArchCEREScript.Util
+import Data.ArchCEREScript.VariablePosition
 
 
 

@@ -1,8 +1,8 @@
-module Parser.ArchCERES.VariablePosition where
+module Parser.ArchCEREScript.VariablePosition where
 
 
-import Data.ArchCERES.Script
-import Parser.ArchCERES.Type
+import Data.ArchCEREScript.Script
+import Parser.ArchCEREScript.Type
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
