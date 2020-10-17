@@ -1,12 +1,12 @@
 module Parser.Util where
 
 
-import Data.ArchCERES.Type
-import Parser.ArchCERES.Type
-
 import Control.Monad (void)
 import Text.Megaparsec
 import Text.Megaparsec.Char
+
+import Data.ArchCERES.Type
+import Parser.ArchCERES.Type
 
 
 parseAWrapped :: Parser a -> Char -> Char -> Parser a

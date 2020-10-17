@@ -1,13 +1,14 @@
 module Parser.ArchCEREScript where
 
 
+import Control.Monad (void)
+import Text.Megaparsec
+import Text.Megaparsec.Char
+
 import Data.ArchCERES.Script
 import Parser.ArchCERES.Type
 import Parser.Util
 
-import Control.Monad (void)
-import Text.Megaparsec
-import Text.Megaparsec.Char
 
 parseArchCEREScript :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
 parseArchCEREScript = parseControlInstruction

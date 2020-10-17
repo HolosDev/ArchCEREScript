@@ -1,11 +1,11 @@
 module Parser.ArchCERES.Type where
 
 
-import Data.ArchCERES.Script ()
-
 import Text.Megaparsec (Parsec)
 import Data.Void (Void)
 import Data.Text (Text)
+
+import Data.ArchCERES.Script ()
 
 
 type ScriptSource = Text
