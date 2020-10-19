@@ -12,12 +12,12 @@ import Parser.Util
 
 parseArchCEREScript :: Ord vc => (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
 parseArchCEREScript = parseControlInstruction
-  -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
+-- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
 parseControlInstruction :: Ord vc => (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
-parseControlInstruction parsers@(_,_,parseVC,_,_,_) = do
+parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
   void (char 'S')
-  choice [ parseSHaveNext, parseSEnd ]
+  choice [parseSHaveNext, parseSEnd]
  where
   parseSHaveNext = do
     partACS <- choice [parseSSeq, parseSSeqs, parseSLoop, parseSCase, parseSPar]
@@ -55,6 +55,7 @@ parseControlInstruction parsers@(_,_,parseVC,_,_,_) = do
 parseManipulationInstruction :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCERES vp vi vc vt co eis)
 parseManipulationInstruction = parseArchCERES
 
+-- TODO: Not yet implemented
 parseArchCERES :: (Parser vp, Parser (vi vc), Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCERES vp vi vc vt co eis)
 parseArchCERES parsers = do
   void (string "ArchCERES")

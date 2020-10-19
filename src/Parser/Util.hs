@@ -44,7 +44,7 @@ parseListWithBy parseValue opening delimiter closing = do
   return vList
 
 parseListWithBy' :: Parser a -> Char -> Char -> Char -> Parser [a]
-parseListWithBy' parseValue opening delimiter closing= do
+parseListWithBy' parseValue opening delimiter closing = do
   void (char opening)
   vList <- parseListKernel parseValue (void (char delimiter))
   void (char closing)
@@ -73,7 +73,7 @@ parseList' parseValue = do
 parseListKernel :: Parser a -> Parser d -> Parser [a]
 parseListKernel parseValue parseDelimiter = do
   mV <- optional parseValue
-  maybe (pure []) (\v -> fmap (v:) (many parseValueWithDelimiter)) mV
+  maybe (pure []) (\v -> fmap (v :) (many parseValueWithDelimiter)) mV
  where
   parseValueWithDelimiter = do
     void parseDelimiter
@@ -151,21 +151,21 @@ parseKVKernelBy parseIdx parseValue inter = do
   idx <- parseIdx
   void (string inter)
   v <- parseValue
-  return (idx,v)
+  return (idx, v)
 
 parseKVKernelBy' :: Parser idx -> Parser v -> Char -> Parser (idx, v)
 parseKVKernelBy' parseIdx parseValue inter = do
   idx <- parseIdx
   void (char inter)
   v <- parseValue
-  return (idx,v)
+  return (idx, v)
 
 parseKVKernel :: Parser idx -> Parser v -> Parser (idx, v)
 parseKVKernel parseIdx parseValue = do
   idx <- parseIdx
   void (char '|')
   v <- parseValue
-  return (idx,v)
+  return (idx, v)
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme space
