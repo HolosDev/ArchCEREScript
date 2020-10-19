@@ -19,6 +19,11 @@ Also provides common components for making CEREscript variants
 ArchCEREScript Parser also not work independently.
 When you define AnCEREScript upon ArchCEREScript, you may need to define `parseAnCEREScript` as like as `parseArchCEREScript parseVariablePlace parseVariableIndex parseValueContainer ...`
 
+ArchCEREScript packages provides **model** data type and parsers for each component.
+These model things are placed in the `Model` directory.
+However, this is not dependent components of the ArchCEREScript.
+Therefore, you just not import the model modules and import your own custom modules for each components for your script language.
+
 ## Variants of CEREScript
 
 * CEREScript-SuperSet
