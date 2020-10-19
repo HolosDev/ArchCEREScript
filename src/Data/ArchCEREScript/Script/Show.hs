@@ -4,7 +4,7 @@ module Data.ArchCEREScript.Script.Show where
 import TextShow ()
 import TextShow as TS
 
-import Data.ArchCEREScript.Data.Show as ACS
+import Data.ArchCEREScript.Show as ACS
 import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.Util
 import Data.ArchCEREScript.VariablePosition

@@ -1,4 +1,4 @@
-module Data.ArchCEREScript.Data.Show where
+module Data.ArchCEREScript.Show where
 
 
 import Data.IntMap.Strict as SIM
