@@ -73,11 +73,8 @@ parseList' parseValue = do
 parseListKernel :: Parser a -> Parser d -> Parser [a]
 parseListKernel parseValue parseDelimiter = do
   mV <- optional parseValue
-  maybe (return []) (\v -> fmap (v:) parseListKernelSub) mV
+  maybe (pure []) (\v -> fmap (v:) (many parseValueWithDelimiter)) mV
  where
-  parseListKernelSub = do
-    mV <- optional parseValueWithDelimiter
-    maybe (return []) (\v -> fmap (v:) parseListKernelSub ) mV
   parseValueWithDelimiter = do
     void parseDelimiter
     parseValue
