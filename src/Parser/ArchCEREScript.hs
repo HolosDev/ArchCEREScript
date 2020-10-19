@@ -42,7 +42,7 @@ parseControlInstruction parsers@(_,_,parseVC,_,_,_) = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
     void (string ",")
-    cases <- parseDefaultVMap parseVC (parseArchCEREScript parsers)
+    cases <- parseDefaultMap parseVC (parseArchCEREScript parsers)
     return $ SCase branchCondition cases
   parseSPar = do
     void (string "Par<")

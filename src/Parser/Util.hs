@@ -79,61 +79,61 @@ parseListKernel parseValue parseDelimiter = do
     void parseDelimiter
     parseValue
 
-parseSMapWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (SMap a)
-parseSMapWithBy parseValue opening delimiter inter closing = do
+parseIntMapWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (IntMap a)
+parseIntMapWithBy parseValue opening delimiter inter closing = do
   void (string opening)
   kvList <- parseListKernel (parseKVBy parseSignedInt parseValue inter) (string delimiter)
   void (string closing)
   return . SIM.fromList $ kvList
 
-parseSMapWithBy' :: Parser a -> Char -> Char -> Char -> Char -> Parser (SMap a)
-parseSMapWithBy' parseValue opening delimiter inter closing = do
+parseIntMapWithBy' :: Parser a -> Char -> Char -> Char -> Char -> Parser (IntMap a)
+parseIntMapWithBy' parseValue opening delimiter inter closing = do
   void (char opening)
   kvList <- parseListKernel (parseKVBy' parseSignedInt parseValue inter) (char delimiter)
   void (char closing)
   return . SIM.fromList $ kvList
 
-parseSMapWith :: Parser a -> ScriptSource -> ScriptSource -> Parser (SMap a)
-parseSMapWith parseValue delimiter inter = do
+parseIntMapWith :: Parser a -> ScriptSource -> ScriptSource -> Parser (IntMap a)
+parseIntMapWith parseValue delimiter inter = do
   kvList <- parseSquareWrapped (parseListKernel (parseKVBy parseSignedInt parseValue inter) (string delimiter))
   return . SIM.fromList $ kvList
 
-parseSMapWith' :: Parser a -> Char -> Char -> Parser (SMap a)
-parseSMapWith' parseValue delimiter inter = do
+parseIntMapWith' :: Parser a -> Char -> Char -> Parser (IntMap a)
+parseIntMapWith' parseValue delimiter inter = do
   kvList <- parseSquareWrapped (parseListKernel (parseKVBy' parseSignedInt parseValue inter) (char delimiter))
   return . SIM.fromList $ kvList
 
-parseDefaultSMap :: Parser a -> Parser (SMap a)
-parseDefaultSMap parseValue = do
+parseDefaultIntMap :: Parser a -> Parser (IntMap a)
+parseDefaultIntMap parseValue = do
   kvList <- parseSquareWrapped (parseListKernel (parseKV parseSignedInt parseValue) (char ','))
   return . SIM.fromList $ kvList
 
-parseVMapWithBy :: Ord idx => Parser idx -> Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (VMap idx a)
-parseVMapWithBy parseIdx parseValue opening delimiter inter closing = do
+parseMapWithBy :: Ord idx => Parser idx -> Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> ScriptSource -> Parser (Map idx a)
+parseMapWithBy parseIdx parseValue opening delimiter inter closing = do
   void (string opening)
   kvList <- parseListKernel (parseKVBy parseIdx parseValue inter) (string delimiter)
   void (string closing)
   return . SM.fromList $ kvList
 
-parseVMapWithBy' :: Ord idx => Parser idx -> Parser a -> Char -> Char -> Char -> Char -> Parser (VMap idx a)
-parseVMapWithBy' parseIdx parseValue opening delimiter inter closing = do
+parseMapWithBy' :: Ord idx => Parser idx -> Parser a -> Char -> Char -> Char -> Char -> Parser (Map idx a)
+parseMapWithBy' parseIdx parseValue opening delimiter inter closing = do
   void (char opening)
   kvList <- parseListKernel (parseKVBy' parseIdx parseValue inter) (char delimiter)
   void (char closing)
   return . SM.fromList $ kvList
 
-parseVMapWith :: Ord idx => Parser idx -> Parser a -> ScriptSource -> ScriptSource -> Parser (VMap idx a)
-parseVMapWith parseIdx parseValue delimiter inter = do
+parseMapWith :: Ord idx => Parser idx -> Parser a -> ScriptSource -> ScriptSource -> Parser (Map idx a)
+parseMapWith parseIdx parseValue delimiter inter = do
   kvList <- parseSquareWrapped (parseListKernel (parseKVBy parseIdx parseValue inter) (string delimiter))
   return . SM.fromList $ kvList
 
-parseVMapWith' :: Ord idx => Parser idx -> Parser a -> Char -> Char -> Parser (VMap idx a)
-parseVMapWith' parseIdx parseValue delimiter inter = do
+parseMapWith' :: Ord idx => Parser idx -> Parser a -> Char -> Char -> Parser (Map idx a)
+parseMapWith' parseIdx parseValue delimiter inter = do
   kvList <- parseSquareWrapped (parseListKernel (parseKVBy' parseIdx parseValue inter) (char delimiter))
   return . SM.fromList $ kvList
 
-parseDefaultVMap :: Ord idx => Parser idx -> Parser a -> Parser (VMap idx a)
-parseDefaultVMap parseIdx parseValue = do
+parseDefaultMap :: Ord idx => Parser idx -> Parser a -> Parser (Map idx a)
+parseDefaultMap parseIdx parseValue = do
   kvList <- parseSquareWrapped (parseListKernel (parseKV parseIdx parseValue) (char ','))
   return . SM.fromList $ kvList
 
