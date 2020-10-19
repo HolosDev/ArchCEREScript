@@ -28,6 +28,7 @@ data ArchCEREScript s vp vi vc vt co eis
     -- NOTE: If an interpreter applies the result, the programmer should make it carefully
     -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
     , branchScripts :: VMap vc (ArchCEREScript s vp vi vc vt co eis)
+    , otherwiseScript :: (ArchCEREScript s vp vi vc vt co eis)
     , cNext :: ArchCEREScript s vp vi vc vt co eis
     }
   | SPar

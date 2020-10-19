@@ -17,7 +17,8 @@ instance (TextShow vp, TextShow (vi vc), TextShow vc, TextShow vt, TextShow co, 
   showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
   showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
   showb (SLoop loopCondition loopScript cNext) = fromLazyText "SLoop<" <> showb loopCondition <> singleton ',' <> showb loopScript <> fromLazyText ">\n" <> showb cNext
-  showb (SCase branchCondition branchScripts cNext) = fromLazyText "SCase<" <> showb branchCondition <> singleton ',' <> showb branchScripts <> fromLazyText ">\n" <> showb cNext
+  showb (SCase branchCondition branchScripts cNext otherwiseScript)
+    = fromLazyText "SCase<" <> showb branchCondition <> singleton ',' <> showb branchScripts <> singleton ',' <> showb otherwiseScript <> fromLazyText ">\n" <> showb cNext
   showb (SPar scripts cNext) = fromLazyText "SPar<" <> ACS.showbList scripts <> fromLazyText ">\n" <> showb cNext
   showb SEnd = fromLazyText "SEnd."
 
