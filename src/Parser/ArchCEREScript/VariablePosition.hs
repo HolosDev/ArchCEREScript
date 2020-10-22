@@ -2,12 +2,13 @@ module Parser.ArchCEREScript.VariablePosition where
 
 
 import Data.ArchCEREScript.Script
+import Data.ArchCEREScript.VariablePosition
 import Parser.ArchCEREScript.Type
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
 
-parseVariablePosition :: ScriptSource -> ArchCEREScript s vp vi vc vt co eis
+parseVariablePosition :: Parser vp -> Parser vi -> Parser vc -> Parser (VariablePosition vp vi)
 parseVariablePosition = undefined
 
