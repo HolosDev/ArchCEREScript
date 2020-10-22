@@ -35,6 +35,12 @@ parseCurlyWrapped :: Parser a -> Parser a
 parseCurlyWrapped parseKernel = parseAWrapped' parseKernel '{' '}'
 parseSquareWrapped :: Parser a -> Parser a
 parseSquareWrapped parseKernel = parseAWrapped' parseKernel '[' ']'
+parseDeltaWrapped :: Parser a -> Parser a
+parseDeltaWrapped parseKernel = parseAWrapped parseKernel "<| " " |>"
+parseDoubleSquareWrapped :: Parser a -> Parser a
+parseDoubleSquareWrapped parseKernel = parseAWrapped parseKernel "[[" "]]"
+parseDoubleStickWrapped :: Parser a -> Parser a
+parseDoubleStickWrapped parseKernel = parseAWrapped parseKernel "||" "||"
 
 parseListWithBy :: Parser a -> ScriptSource -> ScriptSource -> ScriptSource -> Parser [a]
 parseListWithBy parseValue opening delimiter closing = do
