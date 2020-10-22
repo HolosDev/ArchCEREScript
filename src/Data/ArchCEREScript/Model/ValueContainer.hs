@@ -2,15 +2,15 @@ module Data.ArchCEREScript.Model.ValueContainer where
 
 
 import Data.IntMap as IM
-import Data.Text.Lazy as LT
 import Data.Trie.Text as Trie
 import Data.Vector as V
 
 import TextShow as TS
 
 import Data.ArchCEREScript.Model.VariableIndex
+import Data.ArchCEREScript.Model.ReactiveString
 import Data.ArchCEREScript.Script
-import Data.ArchCEREScript.Script.Show
+import Data.ArchCEREScript.Script.Show ()
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
 import Data.ArchCEREScript.VariablePosition
@@ -31,7 +31,7 @@ data Value s vp vt co eis
   | PtrValue {pV :: VariablePosition vp (VariableIndex s (Value s vp vt co eis) vt co eis)}
   | ScrValue {sV :: ArchCEREScript s vp (VariableIndex s (Value s vp vt co eis) vt co eis) (Value s vp vt co eis) vt co eis}
   | RctValue {rVT :: vt, rV :: ArchCEREScript s vp (VariableIndex s (Value s vp vt co eis) vt co eis) (Value s vp vt co eis) vt co eis}
-  | RSValue {rsV :: (ReactiveString s vp vt co eis)}
+  | RSValue {rsV :: (ReactiveString s vp (Value s vp vt co eis) vt co eis)}
   | ErrValue {errMessage :: Message}
 
 instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => Show (Value s vp vt co eis) where
@@ -81,23 +81,3 @@ instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => TextShow (Valu
   showb (RctValue vt r) = fromText "RV" <> wrapDelta (wrapSpace (showb vt <> space <> showb r))
   showb (RSValue rs) = fromText "RS" <> wrapDelta (wrapSpace (showb rs))
   showb (ErrValue e) = fromText "EV<| " <> fromText e <> fromText " |>"
-
-
--------------------------------- # ReactiveString # --------------------------------
-
-data ReactiveString s vp vt co eis
-  = RSStr Str (ReactiveString s vp vt co eis)
-  | RSScr (ArchCEREScript s vp (VariableIndex s (Value s vp vt co eis) (Value s vp vt co eis) co eis) (Value s vp vt co eis) vt co eis) (ReactiveString s vp vt co eis)
-  | RSVP (VariablePosition vp (VariableIndex s (Value s vp vt co eis) vt co eis)) (ReactiveString s vp vt co eis)
-  | RSEnd
-
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => Show (ReactiveString s vp vt co eis) where
-  show = toString . showb
-
--- VariablePosition VariablePlace (VariableIndex s (Value s vp vt co eis) vt co eis)
-
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => TextShow (ReactiveString s vp vt co eis) where
-  showb (RSStr str rs) = wrapWith "<<<|>" "<|>>>" (fromText str <> semicolon <> showb rs)
-  showb (RSScr scr rs) = wrapWith "<<|>>" "<<|>>" (showb scr <> semicolon <> showb rs)
-  showb (RSVP vP rs) = wrapWith "<|>>>" "<<<|>" (showb vP <> semicolon <> showb rs)
-  showb RSEnd = fromText "<<:>>"

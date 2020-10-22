@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f0cff49e2ce28ec2f4d01c698c5e13addc73fda1662b8cfe487c3a38698d241d
+-- hash: 4bf42d433c46b373ba9c65dea6c45ea4608f4efe5366b26cffb743029c0d4823
 
 name:           ArchCEREScript
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Data.ArchCEREScript.Model.ReactiveString
       Data.ArchCEREScript.Model.ValueContainer
       Data.ArchCEREScript.Model.ValueType
       Data.ArchCEREScript.Model.VariableIndex
