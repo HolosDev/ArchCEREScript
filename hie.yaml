@@ -2,3 +2,15 @@ cradle:
   stack:
     - path: "./src"
       component: "ArchCEREScript:lib"
+
+    - path: "./test"
+      component: "ArchCEREScript:test:Test-Implementation"
+
+    - path: "./tests/Implementation"
+      component: "ArchCEREScript:test:Test-Implementation"
+
+    - path: "./test"
+      component: "ArchCEREScript:test:Test-Spec"
+
+    - path: "./tests/Spec"
+      component: "ArchCEREScript:test:Test-Spec"
