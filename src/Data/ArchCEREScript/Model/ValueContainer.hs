@@ -19,25 +19,25 @@ import Data.ArchCEREScript.VariablePosition.Show ()
 
 -------------------------------- # Value # --------------------------------
 -- TODO: Can't determine whether `(ErrValue _) /= (ErrValue _)` or not
-data Value s vp vt co eis
+data Value vp vt co eis
   = IntValue {iV :: Int}
   | FltValue {fV :: Double}
   | TxtValue {tV :: Str}
   | BoolValue {bV :: Bool}
   | AtomValue
-  | ArrValue {aV :: Array (Value s vp vt co eis)}
-  | IMapValue {smV :: IMap (Value s vp vt co eis)}
-  | NMapValue {vmV :: NMap (Value s vp vt co eis)}
-  | PtrValue {pV :: VariablePosition vp (VariableIndex s (Value s vp vt co eis) vt co eis)}
-  | ScrValue {sV :: ArchCEREScript s vp (VariableIndex s (Value s vp vt co eis) vt co eis) (Value s vp vt co eis) vt co eis}
-  | RctValue {rVT :: vt, rV :: ArchCEREScript s vp (VariableIndex s (Value s vp vt co eis) vt co eis) (Value s vp vt co eis) vt co eis}
-  | RSValue {rsV :: (ReactiveString s vp (Value s vp vt co eis) vt co eis)}
+  | ArrValue {aV :: Array (Value vp vt co eis)}
+  | IMapValue {smV :: IMap (Value vp vt co eis)}
+  | NMapValue {vmV :: NMap (Value vp vt co eis)}
+  | PtrValue {pV :: VariablePosition vp (VariableIndex (Value vp vt co eis) vt co eis)}
+  | ScrValue {sV :: ArchCEREScript vp (VariableIndex (Value vp vt co eis) vt co eis) (Value vp vt co eis) vt co eis}
+  | RctValue {rVT :: vt, rV :: ArchCEREScript vp (VariableIndex (Value vp vt co eis) vt co eis) (Value vp vt co eis) vt co eis}
+  | RSValue {rsV :: (ReactiveString vp (Value vp vt co eis) vt co eis)}
   | ErrValue {errMessage :: Message}
 
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => Show (Value s vp vt co eis) where
+instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => Show (Value vp vt co eis) where
   show = toString . showb
 
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => TextShow (Value s vp vt co eis) where
+instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => TextShow (Value vp vt co eis) where
   showb (IntValue i) = fromText "IV" <> wrapDelta (wrapSpace (showb i))
   showb (FltValue f) = fromText "FV" <> wrapDelta (wrapSpace (showb f))
   showb (TxtValue t) = fromText "TV" <> wrapDelta (wrapSpace (showb t))

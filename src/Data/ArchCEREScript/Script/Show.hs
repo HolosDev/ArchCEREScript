@@ -11,10 +11,10 @@ import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.VariablePosition.Show ()
 
 
-instance (TextShow vp, TextShow vi, TextShow vc, TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript s vp vi vc vt co eis) where
+instance (TextShow vp, TextShow vi, TextShow vc, TextShow vt, TextShow co, TextShow eis) => Show (ArchCEREScript vp vi vc vt co eis) where
   show = toString . showb
 
-instance (TextShow vp, TextShow vi, TextShow vc, TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCEREScript s vp vi vc vt co eis) where
+instance (TextShow vp, TextShow vi, TextShow vc, TextShow vt, TextShow co, TextShow eis) => TextShow (ArchCEREScript vp vi vc vt co eis) where
   showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
   showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
   showb (SLoop loopCondition loopScript cNext) = fromLazyText "SLoop<" <> showb loopCondition <> comma <> showb loopScript <> fromLazyText ">\n" <> showb cNext

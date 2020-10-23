@@ -11,11 +11,11 @@ import Parser.ArchCEREScript.VariablePosition
 import Parser.Util
 
 
-parseArchCEREScript :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
+parseArchCEREScript :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript vp vi vc vt co eis)
 parseArchCEREScript = parseControlInstruction
 -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
-parseControlInstruction :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript s vp vi vc vt co eis)
+parseControlInstruction :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript vp vi vc vt co eis)
 parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
   void (char 'S')
   choice [parseSHaveNext, parseSEnd]

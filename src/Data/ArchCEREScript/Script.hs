@@ -7,33 +7,33 @@ import Data.ArchCEREScript.VariablePosition
 
 -------------------------------- # ArchCEREScript # --------------------------------
 
-data ArchCEREScript s vp vi vc vt co eis
+data ArchCEREScript vp vi vc vt co eis
   = SSeq
     { aInst :: ArchCERES vp vi vc vt co eis
-    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    , cNext :: ArchCEREScript vp vi vc vt co eis
     }
   | SSeqs
     { instList :: [ArchCERES vp vi vc vt co eis]
-    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    , cNext :: ArchCEREScript vp vi vc vt co eis
     }
   | SLoop
-    { loopCondition :: ArchCEREScript s vp vi vc vt co eis
-    , loopScript :: ArchCEREScript s vp vi vc vt co eis
-    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    { loopCondition :: ArchCEREScript vp vi vc vt co eis
+    , loopScript :: ArchCEREScript vp vi vc vt co eis
+    , cNext :: ArchCEREScript vp vi vc vt co eis
     }
   | SCase
-    -- Note: type of branchCondition should be :: s -> Int which s is :: (World, SI, Env)
-    { branchCondition :: ArchCEREScript s vp vi vc vt co eis
+    -- Note: type of branchCondition should be :: -> Int which is :: (World, SI, Env)
+    { branchCondition :: ArchCEREScript vp vi vc vt co eis
     -- TODO: Should decide that the result of branchScript would be applied to Env or not
     -- NOTE: If an interpreter applies the result, the programmer should make it carefully
     -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
-    , branchScripts :: VMap vc (ArchCEREScript s vp vi vc vt co eis)
-    , otherwiseScript :: (ArchCEREScript s vp vi vc vt co eis)
-    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    , branchScripts :: VMap vc (ArchCEREScript vp vi vc vt co eis)
+    , otherwiseScript :: (ArchCEREScript vp vi vc vt co eis)
+    , cNext :: ArchCEREScript vp vi vc vt co eis
     }
   | SPar
-    { scripts :: [ArchCEREScript s vp vi vc vt co eis]
-    , cNext :: ArchCEREScript s vp vi vc vt co eis
+    { scripts :: [ArchCEREScript vp vi vc vt co eis]
+    , cNext :: ArchCEREScript vp vi vc vt co eis
     }
   | SEnd
 
