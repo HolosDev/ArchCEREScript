@@ -9,6 +9,5 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 
 
-parseVariablePosition :: Parser vp -> Parser vi -> Parser vc -> Parser (VariablePosition vp vi)
-parseVariablePosition = undefined
-
+parseVariablePositionWith :: Parser vp -> Parser (vi eis vc vp vt co) -> Parser (VariablePosition eis vi vc vp vt co)
+parseVariablePositionWith = undefined

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4bf42d433c46b373ba9c65dea6c45ea4608f4efe5366b26cffb743029c0d4823
+-- hash: fef2e9d5feb9cbc3fa00f6e87813607944cabcbc092a0e5e0f79e6b15a615e7d
 
 name:           ArchCEREScript
 version:        0.1.0.0
@@ -50,7 +50,7 @@ library
       Nothing
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings
+  default-extensions: OverloadedStrings TypeInType
   build-depends:
       base >=4.7 && <5
     , bytestring
@@ -73,7 +73,7 @@ test-suite Test-Implementation
   hs-source-dirs:
       test
       tests/Implementation
-  default-extensions: OverloadedStrings TemplateHaskell
+  default-extensions: OverloadedStrings TypeInType TemplateHaskell
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       ArchCEREScript
@@ -106,7 +106,7 @@ test-suite Test-Spec
   hs-source-dirs:
       test
       tests/Spec
-  default-extensions: OverloadedStrings TemplateHaskell
+  default-extensions: OverloadedStrings TypeInType TemplateHaskell
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       ArchCEREScript

@@ -11,11 +11,12 @@ import Parser.ArchCEREScript.VariablePosition
 import Parser.Util
 
 
-parseArchCEREScript :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript vp vi vc vt co eis)
+parseArchCEREScript :: Ord (vc eis vp vt co) => (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vi vc vp vt co)
 parseArchCEREScript = parseControlInstruction
+
 -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
-parseControlInstruction :: Ord vc => (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCEREScript vp vi vc vt co eis)
+parseControlInstruction :: Ord (vc eis vp vt co) => (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vi vc vp vt co)
 parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
   void (char 'S')
   choice [parseSHaveNext, parseSEnd]
@@ -55,13 +56,13 @@ parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
     string "End."
     return SEnd
 
-parseManipulationInstruction :: (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCERES vp vi vc vt co eis)
+parseManipulationInstruction :: (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vi vc vp vt co)
 parseManipulationInstruction = parseArchCERES
 
 -- TODO: Not yet implemented
-parseArchCERES :: (Parser vp, Parser vi, Parser vc, Parser vt, Parser co, Parser eis) -> Parser (ArchCERES vp vi vc vt co eis)
-parseArchCERES parsers@(parseVP, parseVIWith, parseVC, parseVT, parseCO, parseEIS)
-  = choice
+parseArchCERES :: (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vi vc vp vt co)
+parseArchCERES parsers@(parseEISWith, parseVIWith, parseVCWith, parseVP, parseVT, parseCO) =
+  choice
     [ parseNoop
     , parseClearVariable
     , parseInitVariable
@@ -114,15 +115,15 @@ parseArchCERES parsers@(parseVP, parseVIWith, parseVC, parseVT, parseCO, parseEI
   parseInitVariable = do
     string "InitVariable"
     consumeASpace
-    vP1 <- (parseVariablePosition undefined undefined undefined)
+    vP1 <- (parseVariablePositionWith undefined undefined)
     consumeASpace
-    vP2 <- (parseVariablePosition undefined undefined undefined)
+    vP2 <- (parseVariablePositionWith undefined undefined)
     return $ CRSInitVariable vP1 vP2
   parseInitVariableAt = do
     string ""
     vp <- parseVP
     consumeASpace
-    vP <- (parseVariablePosition undefined undefined undefined)
+    vP <- (parseVariablePositionWith undefined undefined)
     return $ CRSInitVariableAt vp vP
   {-
   parseCheckVariable = do
@@ -221,7 +222,7 @@ parseArchCERES parsers@(parseVP, parseVIWith, parseVC, parseVT, parseCO, parseEI
   parseToList = do
     string ""
     return CRS
-    -}
+  -}
   parseExt = return CRSNoop -- Use parseEIS
   consumeASpace :: Parser ()
   consumeASpace = void (char ' ')

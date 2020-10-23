@@ -15,7 +15,7 @@ import Data.ArchCEREScript.VariablePosition.Show ()
 -- *pN: Partial NIdx: VIN "ABC" => VIpN "AB"
 -- PVI*: Partial Index: VIIN 12 "ABC" => PVI 12
 
-data VariableIndex vc vt co eis
+data VariableIndex eis vc vp vt co
   = VII IIdx
   | VIN NIdx
   | VIpN NIdx
@@ -28,10 +28,10 @@ data VariableIndex vc vt co eis
   | VIIRIT IIdx [IIdx] Time
   | VINRIT NIdx [IIdx] Time
   | VIpNRIT NIdx [IIdx] Time
-  | VIV vc
+  | VIV (vc eis vp vt co)
   | VIAtom
   | VINull
-  | VIPtr (VariablePosition VariablePlace (VariableIndex vc vt co eis))
+  | VIPtr (VariablePosition eis VariableIndex vc vp vt co)
   | PVII IIdx
   | PVIN NIdx
   | PVIpN NIdx
@@ -44,10 +44,10 @@ data VariableIndex vc vt co eis
   | PVIpNRIT NIdx [IIdx] Time
   deriving (Eq, Ord)
 
-instance (TextShow vc, TextShow vt, TextShow co, TextShow eis) => Show (VariableIndex vc vt co eis) where
+instance (TextShow eis, TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => Show (VariableIndex eis vc vp vt co) where
   show = toString . showb
 
-instance (TextShow vc, TextShow vt, TextShow co, TextShow eis) => TextShow (VariableIndex vc vt co eis) where
+instance (TextShow eis, TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => TextShow (VariableIndex eis vc vp vt co) where
   showb (VII idx) = showb1 "VII" idx
   showb (VIN nKey) = showb1 "VIN" nKey
   showb (VIpN nKey) = showb1 "VIpN" nKey

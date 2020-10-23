@@ -19,25 +19,26 @@ import Data.ArchCEREScript.VariablePosition.Show ()
 
 -------------------------------- # Value # --------------------------------
 -- TODO: Can't determine whether `(ErrValue _) /= (ErrValue _)` or not
-data Value vp vt co eis
+data Value eis vp vt co
   = IntValue {iV :: Int}
   | FltValue {fV :: Double}
   | TxtValue {tV :: Str}
   | BoolValue {bV :: Bool}
   | AtomValue
-  | ArrValue {aV :: Array (Value vp vt co eis)}
-  | IMapValue {smV :: IMap (Value vp vt co eis)}
-  | NMapValue {vmV :: NMap (Value vp vt co eis)}
-  | PtrValue {pV :: VariablePosition vp (VariableIndex (Value vp vt co eis) vt co eis)}
-  | ScrValue {sV :: ArchCEREScript vp (VariableIndex (Value vp vt co eis) vt co eis) (Value vp vt co eis) vt co eis}
-  | RctValue {rVT :: vt, rV :: ArchCEREScript vp (VariableIndex (Value vp vt co eis) vt co eis) (Value vp vt co eis) vt co eis}
-  | RSValue {rsV :: (ReactiveString vp (Value vp vt co eis) vt co eis)}
+  | ArrValue {aV :: Array (Value eis vp vt co)}
+  | IMapValue {smV :: IMap (Value eis vp vt co)}
+  | NMapValue {vmV :: NMap (Value eis vp vt co)}
+  | PtrValue {pV :: VariablePosition eis VariableIndex Value vp vt co}
+  | ScrValue {sV :: ArchCEREScript eis VariableIndex Value vp vt co}
+  | RctValue {rVT :: vt, rV :: ArchCEREScript eis VariableIndex Value vp vt co}
+  | RSValue {rsV :: ReactiveString eis Value vp vt co}
   | ErrValue {errMessage :: Message}
+  deriving (Eq)
 
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => Show (Value vp vt co eis) where
+instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => Show (Value eis vp vt co) where
   show = toString . showb
 
-instance (TextShow vp, TextShow vt, TextShow co, TextShow eis) => TextShow (Value vp vt co eis) where
+instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Value eis vp vt co) where
   showb (IntValue i) = fromText "IV" <> wrapDelta (wrapSpace (showb i))
   showb (FltValue f) = fromText "FV" <> wrapDelta (wrapSpace (showb f))
   showb (TxtValue t) = fromText "TV" <> wrapDelta (wrapSpace (showb t))
