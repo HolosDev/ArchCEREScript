@@ -27,8 +27,8 @@ data Value eis vp co
   | BoolValue {bV :: Bool}
   | AtomValue
   | ArrValue {aV :: Array (Value eis vp co)}
-  | IMapValue {smV :: IMap (Value eis vp co)}
-  | NMapValue {vmV :: NMap (Value eis vp co)}
+  | IMapValue {imV :: IMap (Value eis vp co)}
+  | NMapValue {nmV :: NMap (Value eis vp co)}
   | PtrValue {pV :: VariablePosition eis VariableIndex ValueContainer Value vp ValueType co}
   | ScrValue {sV :: ArchCEREScript eis VariablePosition VariableIndex ValueContainer Value vp ValueType co}
   | RctValue {rVT :: ValueType, rV :: ArchCEREScript eis VariablePosition VariableIndex ValueContainer Value vp ValueType co}
@@ -43,8 +43,8 @@ instance (Ord eis, Ord vp, Ord co) => Ord (Value eis vp co) where
   compare (BoolValue bVA) (BoolValue bVB) = compare bVA bVB
   compare AtomValue AtomValue = EQ
   compare (ArrValue aVA) (ArrValue aVB) = compare aVA aVB
-  compare (IMapValue smVA) (IMapValue smVB) = compare smVA smVB
-  compare (NMapValue vmVA) (NMapValue vmVB) = compare (Trie.toList vmVA) (Trie.toList vmVB)
+  compare (IMapValue imVA) (IMapValue imVB) = compare imVA imVB
+  compare (NMapValue nmVA) (NMapValue nmVB) = compare (Trie.toList nmVA) (Trie.toList nmVB)
   compare (PtrValue pVA) (PtrValue pVB) = compare pVA pVB
   compare (ScrValue sVA) (ScrValue sVB) = compare sVA sVB
   compare (RctValue rVTA rVA) (RctValue rVTB rVB) = if compare rVTA rVTB /= EQ then compare rVA rVB else EQ
@@ -58,19 +58,19 @@ instance (TextShow eis, TextShow vp, TextShow co) => Show (Value eis vp co) wher
   show = toString . showb
 
 instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) where
-  showb (IntValue i) = fromText "IV" <> wrapDelta (wrapSpace (showb i))
-  showb (FltValue f) = fromText "FV" <> wrapDelta (wrapSpace (showb f))
-  showb (TxtValue t) = fromText "TV" <> wrapDelta (wrapSpace (showb t))
-  showb (BoolValue b) = fromText "BV" <> wrapDelta (wrapSpace (showb b))
+  showb (IntValue iV) = fromText "IV" <> wrapDelta (wrapSpace (showb iV))
+  showb (FltValue fV) = fromText "FV" <> wrapDelta (wrapSpace (showb fV))
+  showb (TxtValue tV) = fromText "TV" <> wrapDelta (wrapSpace (showb tV))
+  showb (BoolValue bV) = fromText "BV" <> wrapDelta (wrapSpace (showb bV))
   showb AtomValue = fromText "AV" <> wrapDelta (wrapSpace (TS.singleton '-'))
-  showb (ArrValue a) = fromText "A" <> wrapDelta (wrapSpace (showbArray a))
+  showb (ArrValue aV) = fromText "A" <> wrapDelta (wrapSpace (showbArray aV))
    where
     --showbArray :: Array (Value acs vP v vt) -> Builder
     showbArray a =
       if V.null a
         then fromText ""
         else V.foldr (\v b -> showb v <> fromText " ||" <> b) (fromText "") a
-  showb (IMapValue a) = fromText "IMap" <> (wrapDoubleSquare (showbIMap a))
+  showb (IMapValue imV) = fromText "IMap" <> wrapDoubleSquare (wrapSpace (showbIMap imV))
    where
     --showbIMap :: SMap (Value acs vP v vt) -> Builder
     showbIMap im =
@@ -81,9 +81,8 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
             (\k v -> (<> space <> showbElem k v <> fromText " ||"))
             (fromText "||")
             im
-    --showbElem :: IIdx -> (Value acs vP v vt) -> Builder
     showbElem k v = showb k <> colon <> showb v
-  showb (NMapValue a) = fromText "NMap[[" <> showbNMap a <> "]]"
+  showb (NMapValue nmV) = fromText "NMap" <> wrapDoubleSquare (wrapSpace (showbNMap nmV))
    where
     --showbNMap :: NMap (Value acs vP v vt) -> Builder
     showbNMap nm =
@@ -94,31 +93,30 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
             (\(k, v) -> (<> space <> showbElem k v <> fromText " ||"))
             (fromText "||")
             $ Trie.toList nm
-    --showbElem :: Text -> (Value acs vP v vt) -> Builder
     showbElem k v = showb k <> colon <> showb v
   showb (PtrValue vP) = fromText "PV" <> wrapDelta (wrapSpace (showb vP))
-  showb (ScrValue s) = fromText "SV" <> wrapDelta (wrapSpace (showb s))
-  showb (RctValue vt r) = fromText "RV" <> wrapDelta (wrapSpace (showb vt <> space <> showb r))
-  showb (RSValue rs) = fromText "RS" <> wrapDelta (wrapSpace (showb rs))
-  showb (ErrValue e) = fromText "EV<| " <> fromText e <> fromText " |>"
+  showb (ScrValue sV) = fromText "SV" <> wrapDelta (wrapSpace (showb sV))
+  showb (RctValue rVT rV) = fromText "RV" <> wrapDelta (wrapSpace (showb rVT <> space <> showb rV))
+  showb (RSValue rsV) = fromText "RS" <> wrapDelta (wrapSpace (showb rsV))
+  showb (ErrValue eM) = fromText "EV" <> wrapDelta (wrapSpace (fromText eM))
 
 showRaw :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> String
 showRaw = T.unpack . showRawT
 
 showRawT :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> Text
-showRawT (IntValue i) = showt i
-showRawT (FltValue f) = showt f
-showRawT (TxtValue t) = t
-showRawT (BoolValue b) = showt b
+showRawT (IntValue iV) = showt iV
+showRawT (FltValue fV) = showt fV
+showRawT (TxtValue tV) = tV
+showRawT (BoolValue bV) = showt bV
 showRawT AtomValue = "Atom"
-showRawT (PtrValue vp) = showt vp
-showRawT (ArrValue a) = showt . V.toList $ a
+showRawT (PtrValue vP) = showt vP
+showRawT (ArrValue aV) = showt . V.toList $ aV
 showRawT (IMapValue _) = error "[Error]<showRawT:=:IMapValue> Not yet implemented"
 showRawT (NMapValue _) = error "[Error]<showRawT:=:NMapValue> Not yet implemented"
-showRawT (ScrValue c) = showt c
-showRawT (RctValue _ c) = showt c
-showRawT (RSValue rs) = showt rs
-showRawT (ErrValue e) = e
+showRawT (ScrValue sV) = showt sV
+showRawT (RctValue _ rV) = showt rV
+showRawT (RSValue rsV) = showt rsV
+showRawT (ErrValue eM) = eM
 
 
 -------------------------------- ValueType --------------------------------
