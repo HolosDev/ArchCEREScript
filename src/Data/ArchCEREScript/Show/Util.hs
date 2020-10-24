@@ -1,7 +1,10 @@
 module Data.ArchCEREScript.Show.Util where
 
 
+import qualified Data.IntMap.Strict as SIM
+import qualified Data.Map.Strict as SM
 import Data.Text (Text)
+
 import TextShow
 import TextShow.Data.ShortText ()
 
@@ -86,6 +89,29 @@ wrapDoubleSquare :: Builder -> Builder
 wrapDoubleSquare b = fromText "[[" <> b <> fromText "]]"
 wrapDoubleStick :: Builder -> Builder
 wrapDoubleStick b = fromText "||" <> b <> fromText "||"
+
+
+instance TextShow a => TextShow (SIM.IntMap a) where
+  showb im = wrapSquare mapInternal
+   where
+    mapInternal :: Builder
+    mapInternal = foldr1 (\v b -> v <> comma <> b) builderList
+    builderList = Prelude.map renderKV . SIM.toList $ im
+    renderKV (k, v) = wrapRound (showb k <> singleton '|' <> showb v)
+instance (TextShow idx, TextShow a) => TextShow (SM.Map idx a) where
+  showb m = wrapSquare mapInternal
+   where
+    mapInternal :: Builder
+    mapInternal = foldr1 (\v b -> v <> comma <> b) builderList
+    builderList = Prelude.map renderKV . SM.toList $ m
+    renderKV (k, v) = wrapRound (showb k <> singleton '|' <> showb v)
+
+showbList :: TextShow a => [a] -> Builder
+showbList aList = wrapSquare mapInternal
+ where
+  mapInternal :: Builder
+  mapInternal = foldr1 (\v b -> v <> comma <> b) . Prelude.map showb $ aList
+
 
 newline :: Builder
 newline = singleton '\n'

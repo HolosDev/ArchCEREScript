@@ -5,9 +5,8 @@ import TextShow ()
 import TextShow as TS
 
 
-import Data.ArchCEREScript.Show as ACS
+import Data.ArchCEREScript.Show.Util as ACS
 import Data.ArchCEREScript.Script
-import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.VariablePosition.Show ()
 
 

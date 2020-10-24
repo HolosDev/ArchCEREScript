@@ -41,10 +41,4 @@ type NMap a = Trie a
 type SMap a = SIM.IntMap a
 type VMap vc a = SM.Map vc a
 
-data Atom = Atom deriving (Eq, Ord, Enum, Read)
-
-instance Show Atom where
-  show Atom = "Atom"
-
-instance TextShow Atom where
-  showb Atom = fromLazyText "Atom"
+data Atom = Atom deriving (Eq, Ord, Enum)

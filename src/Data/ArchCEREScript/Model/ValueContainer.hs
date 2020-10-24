@@ -35,6 +35,23 @@ data Value eis vp vt co
   | ErrValue {errMessage :: Message}
   deriving (Eq)
 
+instance (Ord eis, Ord vp, Ord vt, Ord co) => Ord (Value eis vp vt co) where
+  compare (IntValue iVA) (IntValue iVB) = compare iVA iVB
+  compare (FltValue fVA) (FltValue fVB) = compare fVA fVB
+  compare (TxtValue tVA) (TxtValue tVB) = compare tVA tVB
+  compare (BoolValue bVA) (BoolValue bVB) = compare bVA bVB
+  compare AtomValue AtomValue = EQ
+  compare (ArrValue aVA) (ArrValue aVB) = compare aVA aVB
+  compare (IMapValue smVA) (IMapValue smVB) = compare smVA smVB
+  compare (NMapValue vmVA) (NMapValue vmVB) = compare (Trie.toList vmVA) (Trie.toList vmVB)
+  compare (PtrValue pVA) (PtrValue pVB) = compare pVA pVB
+  compare (ScrValue sVA) (ScrValue sVB) = compare sVA sVB
+  compare (RctValue rVTA rVA) (RctValue rVTB rVB) = if compare rVTA rVTB /= EQ then compare rVA rVB else EQ
+  compare (RSValue rsVA) (RSValue rsVB) = compare rsVA rsVB
+  compare (ErrValue eVA) (ErrValue eVB) = compare eVA eVB
+  --TODO: For ordering, vt should be coupled with Value, and we can use vc for container
+  --compare vA vB = compare (valueType vA) (valueType vB)
+
 instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => Show (Value eis vp vt co) where
   show = toString . showb
 
