@@ -12,4 +12,6 @@ import Data.ArchCEREScript.Model.VariablePlace
 import Data.ArchCEREScript.Model.VariablePosition
 
 
-type ModelCS = ArchCEREScript () VariablePosition VariableIndex ValueContainer Value VariablePlace ValueType CERESOperator
+data EIS0 = EIS0
+
+type ModelCS = ArchCEREScript EIS0 VariablePosition VariableIndex ValueContainer Value VariablePlace ValueType CERESOperator
