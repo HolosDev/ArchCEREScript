@@ -1,4 +1,4 @@
-module Data.ArchCEREScript.Script where
+module Data.ArchCEREScript where
 
 
 import Data.ArchCEREScript.Type

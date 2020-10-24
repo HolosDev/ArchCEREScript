@@ -11,8 +11,8 @@ import TextShow as TS
 import Data.ArchCEREScript.Model.ReactiveString
 import Data.ArchCEREScript.Model.ValueContainer
 import Data.ArchCEREScript.Model.VariableIndex
-import Data.ArchCEREScript.Script
-import Data.ArchCEREScript.Script.Show ()
+import Data.ArchCEREScript
+import Data.ArchCEREScript.Show ()
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
 import Data.ArchCEREScript.Model.VariablePosition

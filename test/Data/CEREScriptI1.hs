@@ -4,7 +4,7 @@ module Data.CEREScriptI1 where
 import           Data.Text                      ( Text )
 
 
-import           Data.ArchCEREScript.Script
+import           Data.ArchCEREScript
 import           Data.ArchCEREScript.Type
 import           Data.ArchCEREScript.VariablePosition
 

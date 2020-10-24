@@ -1,7 +1,7 @@
 module Data.ArchCEREScript.Model.MCS where
 
 
-import Data.ArchCEREScript.Script
+import Data.ArchCEREScript
 
 --import Data.ArchCEREScript.Model.Operator
 import Data.ArchCEREScript.Model.Operator

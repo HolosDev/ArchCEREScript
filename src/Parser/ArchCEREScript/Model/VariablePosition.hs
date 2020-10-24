@@ -1,7 +1,7 @@
 module Parser.ArchCEREScript.Model.VariablePosition where
 
 
-import Data.ArchCEREScript.Script
+import Data.ArchCEREScript
 import Parser.ArchCEREScript.Type
 
 import Text.Megaparsec

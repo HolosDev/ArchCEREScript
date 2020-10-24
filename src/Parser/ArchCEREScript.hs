@@ -5,7 +5,7 @@ import Control.Monad (void)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
-import Data.ArchCEREScript.Script
+import Data.ArchCEREScript
 import Parser.ArchCEREScript.Type
 import Parser.Util
 
