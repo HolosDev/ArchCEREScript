@@ -2,6 +2,7 @@ module Data.ArchCEREScript.Model.Value where
 
 
 import Data.IntMap as IM
+import Data.Text as T
 import Data.Trie.Text as Trie
 import Data.Vector as V
 
@@ -99,6 +100,24 @@ instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Valu
   showb (RctValue vt r) = fromText "RV" <> wrapDelta (wrapSpace (showb vt <> space <> showb r))
   showb (RSValue rs) = fromText "RS" <> wrapDelta (wrapSpace (showb rs))
   showb (ErrValue e) = fromText "EV<| " <> fromText e <> fromText " |>"
+
+showRaw :: (TextShow eis, TextShow vt, TextShow vp, TextShow co) => Value eis vp vt co -> String
+showRaw = T.unpack . showRawT
+
+showRawT :: (TextShow eis, TextShow vt, TextShow vp, TextShow co) => Value eis vp vt co -> Text
+showRawT (IntValue i) = showt i
+showRawT (FltValue f) = showt f
+showRawT (TxtValue t) = t
+showRawT (BoolValue b) = showt b
+showRawT AtomValue = "Atom"
+showRawT (PtrValue vp) = showt vp
+showRawT (ArrValue a) = showt . V.toList $ a
+showRawT (IMapValue _) = error "[Error]<showRawT:=:IMapValue> Not yet implemented"
+showRawT (NMapValue _) = error "[Error]<showRawT:=:NMapValue> Not yet implemented"
+showRawT (ScrValue c) = showt c
+showRawT (RctValue _ c) = showt c
+showRawT (RSValue rs) = showt rs
+showRawT (ErrValue e) = e
 
 
 -------------------------------- ValueType --------------------------------
