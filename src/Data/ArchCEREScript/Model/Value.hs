@@ -68,8 +68,8 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
     --showbArray :: Array (Value acs vP v vt) -> Builder
     showbArray a =
       if V.null a
-        then fromText ""
-        else V.foldr (\v b -> showb v <> fromText " ||" <> b) (fromText "") a
+        then blank
+        else V.foldr (\v b -> showb v <> fromText " ||" <> b) blank a
   showb (IMapValue imV) = fromText "IMap" <> wrapDoubleSquare (wrapSpace (showbIMap imV))
    where
     --showbIMap :: SMap (Value acs vP v vt) -> Builder
