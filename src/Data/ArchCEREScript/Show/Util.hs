@@ -112,7 +112,6 @@ showbList aList = wrapSquare mapInternal
   mapInternal :: Builder
   mapInternal = foldr1 (\v b -> v <> comma <> b) . Prelude.map showb $ aList
 
-
 newline :: Builder
 newline = singleton '\n'
 tab :: Builder

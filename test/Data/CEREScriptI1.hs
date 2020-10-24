@@ -12,7 +12,7 @@ import           Data.ArchCEREScript.VariablePosition
 type CEREScriptE1 = ArchCERES VP1 VI1 V1 VT1 CO1 (EIS VP1 VI1 V1 VT1 CO1)
 
 -- NOTE: Have five extended instructions
-data EIS vp vi vc vt vo
+data EIS vp vi vc v vt vo
   = EISAbc
   | EISBcd (VariablePosition vp vi vc)
   | EISCde (VariablePosition vp vi vc) (VariablePosition vp vi vc)

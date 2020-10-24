@@ -11,13 +11,13 @@ import Parser.ArchCEREScript.VariablePosition
 import Parser.Util
 
 
-parseArchCEREScript :: Ord (vc eis vp vt co) => (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vi vc vp vt co)
+parseArchCEREScript :: Ord (vc eis v vp co) => (Parser eis, Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vi vc v vp vt co)
 parseArchCEREScript = parseControlInstruction
 
 -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
-parseControlInstruction :: Ord (vc eis vp vt co) => (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vi vc vp vt co)
-parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
+parseControlInstruction :: Ord (vc eis v vp co) => (Parser eis, Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vi vc v vp vt co)
+parseControlInstruction parsers@(_, _, parseVCWith, _, _, _, _) = do
   void (char 'S')
   choice [parseSHaveNext, parseSEnd]
  where
@@ -44,7 +44,7 @@ parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
     void (string ",")
-    cases <- parseDefaultMap parseVC (parseArchCEREScript parsers)
+    cases <- parseDefaultMap parseVCWith (parseArchCEREScript parsers)
     void (string ",")
     otherwiseScript <- parseArchCEREScript parsers
     return $ SCase branchCondition cases otherwiseScript
@@ -56,12 +56,12 @@ parseControlInstruction parsers@(_, _, parseVC, _, _, _) = do
     string "End."
     return SEnd
 
-parseManipulationInstruction :: (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vi vc vp vt co)
+parseManipulationInstruction :: (Parser eis, Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCERES eis vi vc v vp vt co)
 parseManipulationInstruction = parseArchCERES
 
 -- TODO: Not yet implemented
-parseArchCERES :: (Parser eis, Parser (vi eis vc vp vt co), Parser (vc eis vp vt co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vi vc vp vt co)
-parseArchCERES parsers@(parseEISWith, parseVIWith, parseVCWith, parseVP, parseVT, parseCO) =
+parseArchCERES :: (Parser eis, Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCERES eis vi vc v vp vt co)
+parseArchCERES parsers@(parseEISWith, parseVIWith, parseVCWith, parseVWith, parseVP, parseVT, parseCO) =
   choice
     [ parseNoop
     , parseClearVariable

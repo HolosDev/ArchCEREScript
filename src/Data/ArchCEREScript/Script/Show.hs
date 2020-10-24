@@ -10,10 +10,10 @@ import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.VariablePosition.Show ()
 
 
-instance (TextShow eis, TextShow (vi eis vc vp vt co), TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCEREScript eis vi vc vp vt co) where
+instance (TextShow eis, TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCEREScript eis vi vc v vp vt co) where
   show = toString . showb
 
-instance (TextShow eis, TextShow (vi eis vc vp vt co), TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCEREScript eis vi vc vp vt co) where
+instance (TextShow eis, TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCEREScript eis vi vc v vp vt co) where
   showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
   showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
   showb (SLoop loopCondition loopScript cNext) = fromLazyText "SLoop<" <> showb loopCondition <> comma <> showb loopScript <> fromLazyText ">\n" <> showb cNext
@@ -22,10 +22,10 @@ instance (TextShow eis, TextShow (vi eis vc vp vt co), TextShow (vc eis vp vt co
   showb (SPar scripts cNext) = fromLazyText "SPar<" <> ACS.showbList scripts <> fromLazyText ">\n" <> showb cNext
   showb SEnd = fromLazyText "SEnd."
 
-instance (TextShow eis, TextShow (vi eis vc vp vt co), TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCERES eis vi vc vp vt co) where
+instance (TextShow eis, TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCERES eis vi vc v vp vt co) where
   show = toString . showb
 
-instance (TextShow eis, TextShow (vi eis vc vp vt co), TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vi vc vp vt co) where
+instance (TextShow eis, TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vi vc v vp vt co) where
   showb CRSNoop = fromLazyText "Noop"
   showb (CRSInitVariable vpA vpB) =
     showbCS2 "InitVariable" vpA vpB

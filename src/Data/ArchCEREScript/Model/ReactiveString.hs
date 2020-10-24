@@ -13,17 +13,17 @@ import Data.ArchCEREScript.VariablePosition.Show ()
 
 
 -------------------------------- # ReactiveString # --------------------------------
-data ReactiveString eis vc vp vt co
-  = RSStr Str (ReactiveString eis vc vp vt co)
-  | RSScr (ArchCEREScript eis VariableIndex vc vp vt co) (ReactiveString eis vc vp vt co)
-  | RSVP (VariablePosition eis VariableIndex vc vp vt co) (ReactiveString eis vc vp vt co)
+data ReactiveString eis vc v vp vt co
+  = RSStr Str (ReactiveString eis vc v vp vt co)
+  | RSScr (ArchCEREScript eis VariableIndex vc v vp vt co) (ReactiveString eis vc v vp vt co)
+  | RSVP (VariablePosition eis VariableIndex vc v vp vt co) (ReactiveString eis vc v vp vt co)
   | RSEnd
   deriving (Eq, Ord)
 
-instance (TextShow eis, TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => Show (ReactiveString eis vc vp vt co) where
+instance (TextShow eis, TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (ReactiveString eis vc v vp vt co) where
   show = toString . showb
 
-instance (TextShow eis, TextShow (vc eis vp vt co), TextShow vp, TextShow vt, TextShow co) => TextShow (ReactiveString eis vc vp vt co) where
+instance (TextShow eis, TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ReactiveString eis vc v vp vt co) where
   showb (RSStr str rs) = wrapWith "<<<|>" "<|>>>" (fromText str <> semicolon <> showb rs)
   showb (RSScr scr rs) = wrapWith "<<|>>" "<<|>>" (showb scr <> semicolon <> showb rs)
   showb (RSVP vP rs) = wrapWith "<|>>>" "<<<|>" (showb vP <> semicolon <> showb rs)

@@ -8,8 +8,9 @@ import Data.Vector as V
 
 import TextShow as TS
 
-import Data.ArchCEREScript.Model.VariableIndex
 import Data.ArchCEREScript.Model.ReactiveString
+import Data.ArchCEREScript.Model.ValueContainer
+import Data.ArchCEREScript.Model.VariableIndex
 import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.Script.Show ()
 import Data.ArchCEREScript.Show.Util
@@ -20,23 +21,23 @@ import Data.ArchCEREScript.VariablePosition.Show ()
 
 -------------------------------- # Value # --------------------------------
 -- TODO: Can't determine whether `(ErrValue _) /= (ErrValue _)` or not
-data Value eis vp vt co
+data Value eis vp co
   = IntValue {iV :: Int}
   | FltValue {fV :: Double}
   | TxtValue {tV :: Str}
   | BoolValue {bV :: Bool}
   | AtomValue
-  | ArrValue {aV :: Array (Value eis vp vt co)}
-  | IMapValue {smV :: IMap (Value eis vp vt co)}
-  | NMapValue {vmV :: NMap (Value eis vp vt co)}
-  | PtrValue {pV :: VariablePosition eis VariableIndex Value vp vt co}
-  | ScrValue {sV :: ArchCEREScript eis VariableIndex Value vp vt co}
-  | RctValue {rVT :: vt, rV :: ArchCEREScript eis VariableIndex Value vp vt co}
-  | RSValue {rsV :: ReactiveString eis Value vp vt co}
+  | ArrValue {aV :: Array (Value eis vp co)}
+  | IMapValue {smV :: IMap (Value eis vp co)}
+  | NMapValue {vmV :: NMap (Value eis vp co)}
+  | PtrValue {pV :: VariablePosition eis VariableIndex ValueContainer Value vp ValueType co}
+  | ScrValue {sV :: ArchCEREScript eis VariableIndex ValueContainer Value vp ValueType co}
+  | RctValue {rVT :: ValueType, rV :: ArchCEREScript eis VariableIndex ValueContainer Value vp ValueType co}
+  | RSValue {rsV :: ReactiveString eis ValueContainer Value vp ValueType co}
   | ErrValue {errMessage :: Message}
   deriving (Eq)
 
-instance (Ord eis, Ord vp, Ord vt, Ord co) => Ord (Value eis vp vt co) where
+instance (Ord eis, Ord vp, Ord co) => Ord (Value eis vp co) where
   compare (IntValue iVA) (IntValue iVB) = compare iVA iVB
   compare (FltValue fVA) (FltValue fVB) = compare fVA fVB
   compare (TxtValue tVA) (TxtValue tVB) = compare tVA tVB
@@ -50,13 +51,13 @@ instance (Ord eis, Ord vp, Ord vt, Ord co) => Ord (Value eis vp vt co) where
   compare (RctValue rVTA rVA) (RctValue rVTB rVB) = if compare rVTA rVTB /= EQ then compare rVA rVB else EQ
   compare (RSValue rsVA) (RSValue rsVB) = compare rsVA rsVB
   compare (ErrValue eVA) (ErrValue eVB) = compare eVA eVB
-  --TODO: For ordering, vt should be coupled with Value, and we can use vc for container
+  --TODO: For ordering, v vt should be coupled with Value, and we can use vc for container
   --compare vA vB = compare (valueType vA) (valueType vB)
 
-instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => Show (Value eis vp vt co) where
+instance (TextShow eis, TextShow vp, TextShow co) => Show (Value eis vp co) where
   show = toString . showb
 
-instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Value eis vp vt co) where
+instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) where
   showb (IntValue i) = fromText "IV" <> wrapDelta (wrapSpace (showb i))
   showb (FltValue f) = fromText "FV" <> wrapDelta (wrapSpace (showb f))
   showb (TxtValue t) = fromText "TV" <> wrapDelta (wrapSpace (showb t))
@@ -64,14 +65,14 @@ instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Valu
   showb AtomValue = fromText "AV" <> wrapDelta (wrapSpace (TS.singleton '-'))
   showb (ArrValue a) = fromText "A" <> wrapDelta (wrapSpace (showbArray a))
    where
-    --showbArray :: Array (Value acs vP vt) -> Builder
+    --showbArray :: Array (Value acs vP v vt) -> Builder
     showbArray a =
       if V.null a
         then fromText ""
         else V.foldr (\v b -> showb v <> fromText " ||" <> b) (fromText "") a
   showb (IMapValue a) = fromText "IMap" <> (wrapDoubleSquare (showbIMap a))
    where
-    --showbIMap :: SMap (Value acs vP vt) -> Builder
+    --showbIMap :: SMap (Value acs vP v vt) -> Builder
     showbIMap im =
       if IM.null im
         then fromText "||  ||"
@@ -80,11 +81,11 @@ instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Valu
             (\k v -> (<> space <> showbElem k v <> fromText " ||"))
             (fromText "||")
             im
-    --showbElem :: IIdx -> (Value acs vP vt) -> Builder
+    --showbElem :: IIdx -> (Value acs vP v vt) -> Builder
     showbElem k v = showb k <> colon <> showb v
   showb (NMapValue a) = fromText "NMap[[" <> showbNMap a <> "]]"
    where
-    --showbNMap :: NMap (Value acs vP vt) -> Builder
+    --showbNMap :: NMap (Value acs vP v vt) -> Builder
     showbNMap nm =
       if Trie.null nm
         then fromText "||  ||"
@@ -93,7 +94,7 @@ instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Valu
             (\(k, v) -> (<> space <> showbElem k v <> fromText " ||"))
             (fromText "||")
             $ Trie.toList nm
-    --showbElem :: Text -> (Value acs vP vt) -> Builder
+    --showbElem :: Text -> (Value acs vP v vt) -> Builder
     showbElem k v = showb k <> colon <> showb v
   showb (PtrValue vP) = fromText "PV" <> wrapDelta (wrapSpace (showb vP))
   showb (ScrValue s) = fromText "SV" <> wrapDelta (wrapSpace (showb s))
@@ -101,10 +102,10 @@ instance (TextShow eis, TextShow vp, TextShow vt, TextShow co) => TextShow (Valu
   showb (RSValue rs) = fromText "RS" <> wrapDelta (wrapSpace (showb rs))
   showb (ErrValue e) = fromText "EV<| " <> fromText e <> fromText " |>"
 
-showRaw :: (TextShow eis, TextShow vt, TextShow vp, TextShow co) => Value eis vp vt co -> String
+showRaw :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> String
 showRaw = T.unpack . showRawT
 
-showRawT :: (TextShow eis, TextShow vt, TextShow vp, TextShow co) => Value eis vp vt co -> Text
+showRawT :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> Text
 showRawT (IntValue i) = showt i
 showRawT (FltValue f) = showt f
 showRawT (TxtValue t) = t
