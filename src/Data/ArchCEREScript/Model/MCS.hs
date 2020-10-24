@@ -1,4 +1,4 @@
-module Data.ArchCEREScript.ModelCS where
+module Data.ArchCEREScript.Model.MCS where
 
 
 import Data.ArchCEREScript.Script
