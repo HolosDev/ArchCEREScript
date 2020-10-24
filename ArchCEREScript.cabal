@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Data.ArchCEREScript.Model.Operator
       Data.ArchCEREScript.Model.ReactiveString
       Data.ArchCEREScript.Model.ValueContainer
       Data.ArchCEREScript.Model.ValueType
