@@ -106,11 +106,11 @@ instance (TextShow idx, TextShow a) => TextShow (SM.Map idx a) where
     builderList = Prelude.map renderKV . SM.toList $ m
     renderKV (k, v) = wrapRound (showb k <> singleton '|' <> showb v)
 
-showbList :: TextShow a => [a] -> Builder
-showbList aList = wrapSquare mapInternal
+showbListWith :: TextShow a => [a] -> Builder -> Builder
+showbListWith aList delimiter = wrapSquare mapInternal
  where
   mapInternal :: Builder
-  mapInternal = foldr1 (\v b -> v <> comma <> b) . Prelude.map showb $ aList
+  mapInternal = foldr1 (\v b -> v <> delimiter <> b) . Prelude.map showb $ aList
 
 blank :: Builder
 blank = fromString ""
