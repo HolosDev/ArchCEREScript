@@ -8,14 +8,13 @@ import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.Script.Show ()
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
-import Data.ArchCEREScript.VariablePosition
-import Data.ArchCEREScript.VariablePosition.Show ()
+import Data.ArchCEREScript.Model.VariablePosition
 
 
 -------------------------------- # ReactiveString # --------------------------------
 data ReactiveString eis vc v vp vt co
   = RSStr Str (ReactiveString eis vc v vp vt co)
-  | RSScr (ArchCEREScript eis VariableIndex vc v vp vt co) (ReactiveString eis vc v vp vt co)
+  | RSScr (ArchCEREScript eis VariablePosition VariableIndex vc v vp vt co) (ReactiveString eis vc v vp vt co)
   | RSVP (VariablePosition eis VariableIndex vc v vp vt co) (ReactiveString eis vc v vp vt co)
   | RSEnd
   deriving (Eq, Ord)

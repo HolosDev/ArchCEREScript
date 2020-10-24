@@ -6,8 +6,7 @@ import TextShow as TS
 import Data.ArchCEREScript.Model.VariablePlace
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
-import Data.ArchCEREScript.VariablePosition
-import Data.ArchCEREScript.VariablePosition.Show ()
+import Data.ArchCEREScript.Model.VariablePosition
 
 
 -------------------------------- # VariableIndex # --------------------------------

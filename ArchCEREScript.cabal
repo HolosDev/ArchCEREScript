@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3148d5c2702f09e53d8b17e3d73ea7245b9079b609005345b4ebb98b2efaf4e6
+-- hash: d5383fef32dc32c2915c333d9525a1d14a4221acbea0b7233cf00b7c17f28fa3
 
 name:           ArchCEREScript
 version:        0.1.0.0
@@ -33,6 +33,7 @@ library
       Data.ArchCEREScript.Model.ValueContainer
       Data.ArchCEREScript.Model.VariableIndex
       Data.ArchCEREScript.Model.VariablePlace
+      Data.ArchCEREScript.Model.VariablePosition
       Data.ArchCEREScript.ModelCS
       Data.ArchCEREScript.Script
       Data.ArchCEREScript.Script.Show
@@ -40,13 +41,11 @@ library
       Data.ArchCEREScript.Show.Util
       Data.ArchCEREScript.Tracker
       Data.ArchCEREScript.Type
-      Data.ArchCEREScript.VariablePosition
-      Data.ArchCEREScript.VariablePosition.Show
       Parser.ArchCEREScript
       Parser.ArchCEREScript.Model.Value
       Parser.ArchCEREScript.Model.VariablePlace
+      Parser.ArchCEREScript.Model.VariablePosition
       Parser.ArchCEREScript.Type
-      Parser.ArchCEREScript.VariablePosition
       Parser.Util
   other-modules:
       Nothing

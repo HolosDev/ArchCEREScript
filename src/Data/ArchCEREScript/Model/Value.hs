@@ -15,8 +15,7 @@ import Data.ArchCEREScript.Script
 import Data.ArchCEREScript.Script.Show ()
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
-import Data.ArchCEREScript.VariablePosition
-import Data.ArchCEREScript.VariablePosition.Show ()
+import Data.ArchCEREScript.Model.VariablePosition
 
 
 -------------------------------- # Value # --------------------------------
@@ -31,8 +30,8 @@ data Value eis vp co
   | IMapValue {smV :: IMap (Value eis vp co)}
   | NMapValue {vmV :: NMap (Value eis vp co)}
   | PtrValue {pV :: VariablePosition eis VariableIndex ValueContainer Value vp ValueType co}
-  | ScrValue {sV :: ArchCEREScript eis VariableIndex ValueContainer Value vp ValueType co}
-  | RctValue {rVT :: ValueType, rV :: ArchCEREScript eis VariableIndex ValueContainer Value vp ValueType co}
+  | ScrValue {sV :: ArchCEREScript eis VariablePosition VariableIndex ValueContainer Value vp ValueType co}
+  | RctValue {rVT :: ValueType, rV :: ArchCEREScript eis VariablePosition VariableIndex ValueContainer Value vp ValueType co}
   | RSValue {rsV :: ReactiveString eis ValueContainer Value vp ValueType co}
   | ErrValue {errMessage :: Message}
   deriving (Eq)
@@ -51,8 +50,9 @@ instance (Ord eis, Ord vp, Ord co) => Ord (Value eis vp co) where
   compare (RctValue rVTA rVA) (RctValue rVTB rVB) = if compare rVTA rVTB /= EQ then compare rVA rVB else EQ
   compare (RSValue rsVA) (RSValue rsVB) = compare rsVA rsVB
   compare (ErrValue eVA) (ErrValue eVB) = compare eVA eVB
-  --TODO: For ordering, v vt should be coupled with Value, and we can use vc for container
-  --compare vA vB = compare (valueType vA) (valueType vB)
+
+--TODO: For ordering, v vt should be coupled with Value, and we can use vc for container
+--compare vA vB = compare (valueType vA) (valueType vB)
 
 instance (TextShow eis, TextShow vp, TextShow co) => Show (Value eis vp co) where
   show = toString . showb
