@@ -12,8 +12,8 @@ import Data.Vector (Vector)
 import TextShow
 import TextShow.Data.Vector
 
-type Operator = Text
-type Category = Text
+type Operator = ShortText
+type Category = ShortText
 
 -- TODO: Check there is obvious difference on performance between ByteString and Lazy Text
 type IHeader = ShortText
