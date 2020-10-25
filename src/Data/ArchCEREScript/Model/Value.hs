@@ -64,40 +64,9 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
   showb (TxtValue tV) = fromText "TV" <> wrapDelta (wrapSpace (showb tV))
   showb (BoolValue bV) = fromText "BV" <> wrapDelta (wrapSpace (showb bV))
   showb AtomValue = fromText "AV" <> wrapDelta (wrapSpace (TS.singleton '-'))
-  showb (ArrValue aV) = fromText "A" <> wrapDelta (wrapSpace (showbArray aV))
-   where
-    showbArray a =
-      if V.null a
-        then blank
-        else V.foldr (\v b -> showb v <> fromText " || " <> b) (showb . V.last $ a) $ V.init a
-  showb (IMapValue imV) = fromText "IMap" <> wrapDoubleSquare (wrapSpace (showbIMap imV))
-   where
-    showbIMap im =
-      if IM.null im
-        then blank
-        else
-          IM.foldrWithKey
-            (\k v b -> showbElem k v <> fromText " || " <> b)
-            (showbElem lk lv)
-            $ deleteMax im
-     where
-      (lk, lv) = fromJust . lookupMax $ im
-      showbElem k v = showb k <> colon <> showb v
-  showb (NMapValue nmV) = fromText "NMap" <> wrapDoubleSquare (wrapSpace (showbNMap nmV))
-   where
-    --showbNMap :: NMap (Value acs vP v vt) -> Builder
-    showbNMap nm =
-      if Trie.null nm
-        then blank
-        else
-          Prelude.foldr
-            (\(k, v) b -> showbElem k v <> fromText " || " <> b)
-            (showbElem hk hv)
-            $ Prelude.tail nmList
-     where
-      nmList = Trie.toList nm
-      (hk, hv) = Prelude.head nmList
-      showbElem k v = showb k <> colon <> showb v
+  showb (ArrValue aV) = fromText "A" <> wrapDelta (wrapSpace (showbInternalArrayWith aV (fromText " || ")))
+  showb (IMapValue imV) = fromText "IMap" <> wrapDoubleSquare (wrapSpace (showbInternalIMapWith imV (fromText " || ") colon))
+  showb (NMapValue nmV) = fromText "NMap" <> wrapDoubleSquare (wrapSpace (showbInternalNMapWith nmV (fromText " || ") colon))
   showb (PtrValue vP) = fromText "PV" <> wrapDelta (wrapSpace (showb vP))
   showb (ScrValue sV) = fromText "SV" <> wrapDelta (wrapSpace (showb sV))
   showb (RctValue rVT rV) = fromText "RV" <> wrapDelta (wrapSpace (showb rVT <> space <> showb rV))

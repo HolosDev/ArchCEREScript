@@ -3,7 +3,10 @@ module Data.ArchCEREScript.Show.Util where
 
 import qualified Data.IntMap.Strict as SIM
 import qualified Data.Map.Strict as SM
+import Data.Maybe
 import Data.Text (Text)
+import qualified Data.Vector as V
+import qualified Data.Trie.Text as Trie
 
 import TextShow
 import TextShow.Data.ShortText ()
@@ -111,6 +114,52 @@ showbListWith aList delimiter = wrapSquare mapInternal
  where
   mapInternal :: Builder
   mapInternal = foldr1 (\v b -> v <> delimiter <> b) . Prelude.map showb $ aList
+
+showbInternalArrayWith :: TextShow a => V.Vector a -> Builder -> Builder
+showbInternalArrayWith a delimiter =
+  if V.null a
+    then blank
+    else V.foldr (\v b -> showb v <> delimiter <> b) (showb . V.last $ a) $ V.init a
+
+showbInternalIMapWith :: TextShow a => SIM.IntMap a -> Builder -> Builder -> Builder
+showbInternalIMapWith im delimiter inter =
+  if SIM.null im
+    then blank
+    else
+      SIM.foldrWithKey
+        (\k v b -> showbElem k v <> delimiter <> b)
+        (showbElem lk lv)
+        $ SIM.deleteMax im
+ where
+  (lk, lv) = fromJust . SIM.lookupMax $ im
+  showbElem k v = showb k <> inter <> showb v
+
+showbInternalMapWith :: (TextShow k, TextShow v) => SM.Map k v -> Builder -> Builder -> Builder
+showbInternalMapWith m delimiter inter =
+  if SM.null m
+    then blank
+    else
+      SM.foldrWithKey
+        (\k v b -> showbElem k v <> delimiter <> b)
+        (showbElem lk lv)
+        $ SM.deleteMax m
+ where
+  (lk, lv) = fromJust . SM.lookupMax $ m
+  showbElem k v = showb k <> inter <> showb v
+
+showbInternalNMapWith :: TextShow a => Trie.Trie a -> Builder -> Builder -> Builder
+showbInternalNMapWith nm delimiter inter =
+  if Trie.null nm
+    then blank
+    else
+      Prelude.foldr
+        (\(k, v) b -> showbElem k v <> delimiter <> b)
+        (showbElem hk hv)
+        $ Prelude.tail nmList
+ where
+  nmList = Trie.toList nm
+  (hk, hv) = Prelude.head nmList
+  showbElem k v = showb k <> inter <> showb v
 
 blank :: Builder
 blank = fromString ""

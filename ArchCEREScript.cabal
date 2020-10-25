@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7b45abb93ca469070a6c4df7c6057590e224193dae0fca9ef82cba29088d1716
+-- hash: 6048fe264b49fc15f76d454c2077fd99b275f54cb9cd6f6b100abf62d9dc9f02
 
 name:           ArchCEREScript
-version:        0.1.0.0
+version:        0.1.0.1
 description:    Please see the README on GitHub at <https://github.com/HolosDev/ArchCEREScript#readme>
 homepage:       https://github.com/HolosDev/ArchCEREScript#readme
 bug-reports:    https://github.com/HolosDev/ArchCEREScript/issues
