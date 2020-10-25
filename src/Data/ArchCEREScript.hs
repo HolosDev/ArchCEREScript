@@ -26,7 +26,7 @@ data ArchCEREScript eis vP vi vc v vp vt co
       , -- TODO: Should decide that the result of branchScript would be applied to Env or not
         -- NOTE: If an interpreter applies the result, the programmer should make it carefully
         -- NOTE: If not, an interpreter may calculate same things twice when the result of branchScript is useful
-        branchScripts :: VMap (vc eis v vp co) (ArchCEREScript eis vP vi vc v vp vt co)
+        branchScripts :: VMap (v eis vp co) (ArchCEREScript eis vP vi vc v vp vt co)
       , otherwiseScript :: (ArchCEREScript eis vP vi vc v vp vt co)
       , cNext :: ArchCEREScript eis vP vi vc v vp vt co
       }

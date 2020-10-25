@@ -39,6 +39,6 @@ type IMap a = IntMap a
 type NMap a = Trie a
 
 type SMap a = SIM.IntMap a
-type VMap vc a = SM.Map vc a
+type VMap v a = SM.Map v a
 
 data Atom = Atom deriving (Eq, Ord, Enum)

@@ -10,13 +10,13 @@ import Parser.ArchCEREScript.Type
 import Parser.Util
 
 
-parseArchCEREScript :: Ord (vc eis v vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
+parseArchCEREScript :: Ord (v eis vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
 parseArchCEREScript = parseControlInstruction
 
 -- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
 
-parseControlInstruction :: Ord (vc eis v vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
-parseControlInstruction parsers@(_, _, _, parseVCWith, _, _, _, _) = do
+parseControlInstruction :: Ord (v eis vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt,Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
+parseControlInstruction parsers@(_, _, _, _, parseValueWith, _, _, _) = do
   void (char 'S')
   choice [parseSHaveNext, parseSEnd]
  where
@@ -43,7 +43,7 @@ parseControlInstruction parsers@(_, _, _, parseVCWith, _, _, _, _) = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
     void (string ",")
-    cases <- parseDefaultMap parseVCWith (parseArchCEREScript parsers)
+    cases <- parseDefaultMap parseValueWith (parseArchCEREScript parsers)
     void (string ",")
     otherwiseScript <- parseArchCEREScript parsers
     return $ SCase branchCondition cases otherwiseScript
