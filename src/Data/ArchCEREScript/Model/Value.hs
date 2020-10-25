@@ -2,6 +2,7 @@ module Data.ArchCEREScript.Model.Value where
 
 
 import Data.IntMap as IM
+import Data.Maybe
 import Data.Text as T
 import Data.Trie.Text as Trie
 import Data.Vector as V
@@ -65,35 +66,38 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
   showb AtomValue = fromText "AV" <> wrapDelta (wrapSpace (TS.singleton '-'))
   showb (ArrValue aV) = fromText "A" <> wrapDelta (wrapSpace (showbArray aV))
    where
-    --showbArray :: Array (Value acs vP v vt) -> Builder
     showbArray a =
       if V.null a
         then blank
-        else V.foldr (\v b -> showb v <> fromText " ||" <> b) blank a
+        else V.foldr (\v b -> showb v <> fromText " || " <> b) (showb . V.last $ a) $ V.init a
   showb (IMapValue imV) = fromText "IMap" <> wrapDoubleSquare (wrapSpace (showbIMap imV))
    where
-    --showbIMap :: SMap (Value acs vP v vt) -> Builder
     showbIMap im =
       if IM.null im
-        then fromText "||  ||"
+        then blank
         else
           IM.foldrWithKey
-            (\k v -> (<> space <> showbElem k v <> fromText " ||"))
-            (fromText "||")
-            im
-    showbElem k v = showb k <> colon <> showb v
+            (\k v b -> showbElem k v <> fromText " || " <> b)
+            (showbElem lk lv)
+            $ deleteMax im
+     where
+      (lk, lv) = fromJust . lookupMax $ im
+      showbElem k v = showb k <> colon <> showb v
   showb (NMapValue nmV) = fromText "NMap" <> wrapDoubleSquare (wrapSpace (showbNMap nmV))
    where
     --showbNMap :: NMap (Value acs vP v vt) -> Builder
     showbNMap nm =
       if Trie.null nm
-        then fromText "||  ||"
+        then blank
         else
           Prelude.foldr
-            (\(k, v) -> (<> space <> showbElem k v <> fromText " ||"))
-            (fromText "||")
-            $ Trie.toList nm
-    showbElem k v = showb k <> colon <> showb v
+            (\(k, v) b -> showbElem k v <> fromText " || " <> b)
+            (showbElem hk hv)
+            $ Prelude.tail nmList
+     where
+      nmList = Trie.toList nm
+      (hk, hv) = Prelude.head nmList
+      showbElem k v = showb k <> colon <> showb v
   showb (PtrValue vP) = fromText "PV" <> wrapDelta (wrapSpace (showb vP))
   showb (ScrValue sV) = fromText "SV" <> wrapDelta (wrapSpace (showb sV))
   showb (RctValue rVT rV) = fromText "RV" <> wrapDelta (wrapSpace (showb rVT <> space <> showb rV))
