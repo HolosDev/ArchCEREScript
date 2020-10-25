@@ -167,6 +167,8 @@ newline :: Builder
 newline = singleton '\n'
 tab :: Builder
 tab = singleton '\t'
+bar :: Builder
+bar = singleton '|'
 comma :: Builder
 comma = singleton ','
 space :: Builder

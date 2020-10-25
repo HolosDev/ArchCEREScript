@@ -74,22 +74,22 @@ instance (TextShow eis, TextShow vp, TextShow co) => TextShow (Value eis vp co) 
   showb (ErrValue eM) = fromText "EV" <> wrapDelta (wrapSpace (fromText eM))
 
 showRaw :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> String
-showRaw = T.unpack . showRawT
+showRaw = toString . showb
 
-showRawT :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> Text
-showRawT (IntValue iV) = showt iV
-showRawT (FltValue fV) = showt fV
-showRawT (TxtValue tV) = tV
-showRawT (BoolValue bV) = showt bV
-showRawT AtomValue = "Atom"
-showRawT (PtrValue vP) = showt vP
-showRawT (ArrValue aV) = showt . V.toList $ aV
-showRawT (IMapValue _) = error "[Error]<showRawT:=:IMapValue> Not yet implemented"
-showRawT (NMapValue _) = error "[Error]<showRawT:=:NMapValue> Not yet implemented"
-showRawT (ScrValue sV) = showt sV
-showRawT (RctValue _ rV) = showt rV
-showRawT (RSValue rsV) = showt rsV
-showRawT (ErrValue eM) = eM
+showbRaw :: (TextShow eis, TextShow vp, TextShow co) => Value eis vp co -> Builder
+showbRaw (IntValue iV) = showb iV
+showbRaw (FltValue fV) = showb fV
+showbRaw (TxtValue tV) = fromText tV
+showbRaw (BoolValue bV) = showb bV
+showbRaw AtomValue = fromText "Atom"
+showbRaw (PtrValue vP) = showb vP
+showbRaw (ArrValue aV) = showbInternalArrayWith aV bar
+showbRaw (IMapValue imV) = showbInternalIMapWith imV bar colon
+showbRaw (NMapValue nmV) = showbInternalNMapWith nmV bar colon
+showbRaw (ScrValue sV) = showb sV
+showbRaw (RctValue _ rV) = showb rV
+showbRaw (RSValue rsV) = showb rsV
+showbRaw (ErrValue eM) = fromText eM
 
 
 -------------------------------- ValueType --------------------------------
