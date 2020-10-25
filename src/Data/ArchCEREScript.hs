@@ -111,7 +111,7 @@ data ArchCERES eis vP vi vc v vp vt co
   -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
   | CRSTo8 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
   -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
-  | CRSToList CHeader [vP eis vi vc v vp vt co]
+  | CRSToList CHeader (Array (vP eis vi vc v vp vt co))
   -- | Ext0
   | CRSExt eis
   deriving (Eq, Ord)

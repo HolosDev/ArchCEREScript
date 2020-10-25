@@ -90,6 +90,6 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
     showbCSC7 "To7" cH vpA vpB vpC vpD vpE vpF vpG
   showb (CRSTo8 cH vpA vpB vpC vpD vpE vpF vpG vpH) =
     showbCSC8 "To8" cH vpA vpB vpC vpD vpE vpF vpG vpH
-  showb (CRSToList cH vpList) =
-    fromLazyText "ToList" <> showb cH <> TS.showbList vpList
+  showb (CRSToList cH vpArray) =
+    fromLazyText "ToList" <> showb cH <> wrapDoubleSquare (wrapSpace (showbInternalArrayWith vpArray (fromText " || ")))
   showb (CRSExt ei) = showb ei
