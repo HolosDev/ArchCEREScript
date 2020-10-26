@@ -16,6 +16,8 @@ type IHeader = ShortText
 type CHeader = ShortText
 type OHeader = ShortText
 
+type LoopLabel = Text
+
 type Branch = Text
 type Priority = Int
 

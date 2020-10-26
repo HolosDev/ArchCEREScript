@@ -38,7 +38,11 @@ parseControlInstruction parsers@(_, _, _, _, parseValueWith, _, _, _) = do
     loopCondition <- parseArchCEREScript parsers
     void (char ',')
     loopScript <- parseArchCEREScript parsers
-    return $ SLoop loopCondition loopScript
+    void (char ',')
+    loopLabel <- parseLabel
+    return $ SLoop loopCondition loopScript loopLabel
+   where
+    parseLabel = undefined
   parseSCase = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers

@@ -18,6 +18,7 @@ data ArchCEREScript eis vP vi vc v vp vt co
   | SLoop
       { loopCondition :: ArchCEREScript eis vP vi vc v vp vt co
       , loopScript :: ArchCEREScript eis vP vi vc v vp vt co
+      , loopLabel :: Maybe LoopLabel
       , cNext :: ArchCEREScript eis vP vi vc v vp vt co
       }
   | SCase
@@ -42,6 +43,8 @@ data ArchCEREScript eis vP vi vc v vp vt co
 data ArchCERES eis vP vi vc v vp vt co
   -- | No-Op
   = CRSNoop
+  -- | Break
+  | CRSBreak (Maybe LoopLabel)
   -- | Clear Storage of vp
   | CRSClearVariable    vp
   -- | Initialize Variable at VP@A with Value of VP@B
