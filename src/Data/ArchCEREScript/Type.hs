@@ -1,16 +1,12 @@
 module Data.ArchCEREScript.Type where
 
-import Data.IntMap (IntMap)
-import Data.IntMap.Strict as SIM
-import Data.Map (Map)
-import Data.Map.Strict as SM
+import Data.IntMap.Strict
+import Data.Map.Strict
 import Data.Text (Text)
 import Data.Text.Short (ShortText)
 import Data.Trie.Text (Trie)
 import Data.Vector (Vector)
 
-import TextShow
-import TextShow.Data.Vector
 
 type Operator = ShortText
 type Category = ShortText
@@ -38,7 +34,7 @@ type Array a = Vector a
 type IMap a = IntMap a
 type NMap a = Trie a
 
-type SMap a = SIM.IntMap a
-type VMap v a = SM.Map v a
+type SMap a = IntMap a
+type VMap v a = Map v a
 
 data Atom = Atom deriving (Eq, Ord, Enum)
