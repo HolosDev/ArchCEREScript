@@ -82,5 +82,5 @@ instance Show InnerIndex where
   show = toString . showb
 
 instance TextShow InnerIndex where
-  showb (IIIdx iIdx) = fromText "II" <> showb iIdx
-  showb (INIdx nIdx) = fromText "NI" <> showb nIdx
+  showb (IIIdx iIdx) = fromText "II" <> wrapSquareBar (showb iIdx)
+  showb (INIdx nIdx) = fromText "NI" <> wrapSquareBar (showb nIdx)

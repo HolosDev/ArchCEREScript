@@ -86,6 +86,8 @@ wrapCurly :: Builder -> Builder
 wrapCurly b = singleton '{' <> b <> singleton '}'
 wrapSquare :: Builder -> Builder
 wrapSquare b = singleton '[' <> b <> singleton ']'
+wrapSquareBar :: Builder -> Builder
+wrapSquareBar b = fromText "[|" <> b <> fromText "|]"
 wrapDelta :: Builder -> Builder
 wrapDelta b = fromText "<|" <> b <> fromText "|>"
 wrapDoubleSquare :: Builder -> Builder
