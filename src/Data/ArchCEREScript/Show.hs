@@ -13,19 +13,19 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
   show = toString . showb
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCEREScript eis vP vi vc v vp vt co) where
-  showb (SSeq aInst cNext) = fromLazyText "SSeq<" <> showb aInst <> fromLazyText ">\n" <> showb cNext
-  showb (SSeqs instList cNext) = fromLazyText "SSeqs<" <> showb instList <> fromLazyText ">\n" <> showb cNext
-  showb (SLoop loopCondition loopScript loopLabel cNext) = fromLazyText "SLoop<" <> showb loopCondition <> comma <> showb loopScript <> comma <> showb loopLabel <> fromLazyText ">\n" <> showb cNext
+  showb (SSeq aInst cNext) = fromText "SSeq<" <> showb aInst <> fromText ">\n" <> showb cNext
+  showb (SSeqs instList cNext) = fromText "SSeqs<" <> showb instList <> fromText ">\n" <> showb cNext
+  showb (SLoop loopCondition loopScript loopLabel cNext) = fromText "SLoop<" <> showb loopCondition <> comma <> showb loopScript <> comma <> showb loopLabel <> fromText ">\n" <> showb cNext
   showb (SCase branchCondition branchScripts cNext otherwiseScript) =
-    fromLazyText "SCase<" <> showb branchCondition <> comma <> showb branchScripts <> comma <> showb otherwiseScript <> fromLazyText ">\n" <> showb cNext
-  showb (SPar scripts cNext) = fromLazyText "SPar<" <> showbListWith scripts comma <> fromLazyText ">\n" <> showb cNext
-  showb SEnd = fromLazyText "SEnd."
+    fromText "SCase<" <> showb branchCondition <> comma <> showb branchScripts <> comma <> showb otherwiseScript <> fromText ">\n" <> showb cNext
+  showb (SPar scripts cNext) = fromText "SPar<" <> showbListWith scripts comma <> fromText ">\n" <> showb cNext
+  showb SEnd = fromText "SEnd."
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCERES eis vP vi vc v vp vt co) where
   show = toString . showb
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vP vi vc v vp vt co) where
-  showb CRSNoop = fromLazyText "Noop"
+  showb CRSNoop = fromText "Noop"
   showb (CRSInitVariable vpA vpB) =
     showbCS2 "InitVariable" vpA vpB
   showb (CRSCheckVariable vpA vpB) =

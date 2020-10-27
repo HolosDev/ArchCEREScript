@@ -10,4 +10,4 @@ instance Show Atom where
   show Atom = "Atom"
 
 instance TextShow Atom where
-  showb Atom = fromLazyText "Atom"
+  showb Atom = fromText "Atom"
