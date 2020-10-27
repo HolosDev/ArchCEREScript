@@ -26,6 +26,8 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vP vi vc v vp vt co) where
   showb CRSNoop = fromText "Noop"
+  showb (CRSBreak mLabel) =
+    fromText "Break" <> maybe blank (\l -> singleton '@' <> wrapSquareBar (fromText l)) mLabel
   showb (CRSInitVariable vpA vpB) =
     showbCS2 "InitVariable" vpA vpB
   showb (CRSCheckVariable vpA vpB) =
