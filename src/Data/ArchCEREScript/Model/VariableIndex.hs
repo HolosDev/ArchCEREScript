@@ -41,6 +41,7 @@ data VariableIndex eis vc v vp vt co
   | PVIIRIT IIdx [IIdx] Time
   | PVINRIT NIdx [IIdx] Time
   | PVIpNRIT NIdx [IIdx] Time
+  | VIComplex (VariableIndex eis vc v vp vt co) [InnerIndex]
   deriving (Eq, Ord)
 
 instance (TextShow eis, TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (VariableIndex eis vc v vp vt co) where
@@ -73,3 +74,13 @@ instance (TextShow eis, TextShow (vc eis v vp co), TextShow (v eis vp co), TextS
   showb (PVIIRIT idx indices time) = showb3 "PVIIRIT" idx indices time
   showb (PVINRIT nKey indices time) = showb3 "PVINRIT" nKey indices time
   showb (PVIpNRIT nKey indices time) = showb3 "PVIpNRIT" nKey indices time
+
+
+data InnerIndex = IIIdx IIdx | INIdx NIdx deriving (Eq, Ord)
+
+instance Show InnerIndex where
+  show = toString . showb
+
+instance TextShow InnerIndex where
+  showb (IIIdx iIdx) = fromText "II" <> showb iIdx
+  showb (INIdx nIdx) = fromText "NI" <> showb nIdx
