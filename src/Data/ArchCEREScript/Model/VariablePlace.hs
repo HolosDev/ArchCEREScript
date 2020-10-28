@@ -25,6 +25,8 @@ data VariablePlace
   | AtRct
   | AtReg
   | AtHere
+  | AtReturn
+  | AtResult
   | AtNull
   deriving (Eq, Ord, Enum, Bounded)
 
@@ -50,4 +52,6 @@ instance TextShow VariablePlace where
   showb AtRct = fromText "AtRct"
   showb AtReg = fromText "AtReg"
   showb AtHere = fromText "AtHere"
+  showb AtReturn = fromText "AtReturn"
+  showb AtResult = fromText "AtResult"
   showb AtNull = fromText "AtNull"
