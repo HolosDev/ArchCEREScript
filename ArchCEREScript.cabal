@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c58fb624841713b8ef4d5522975da0689d61cbb7490c94bc289476568bd9419a
+-- hash: 741671f47a3b752ab363afa30e9d7fc7dd5b6bd51aa382eca650073580d3589d
 
 name:           ArchCEREScript
-version:        0.1.0.1
+version:        0.2.0.0
 description:    Please see the README on GitHub at <https://github.com/HolosDev/ArchCEREScript#readme>
 homepage:       https://github.com/HolosDev/ArchCEREScript#readme
 bug-reports:    https://github.com/HolosDev/ArchCEREScript/issues
@@ -30,6 +30,7 @@ library
       Data.ArchCEREScript
       Data.ArchCEREScript.Model.EIS
       Data.ArchCEREScript.Model.MCS
+      Data.ArchCEREScript.Model.MCS.Util
       Data.ArchCEREScript.Model.Operator
       Data.ArchCEREScript.Model.ReactiveString
       Data.ArchCEREScript.Model.Value
@@ -43,6 +44,7 @@ library
       Data.ArchCEREScript.Tracker.Show
       Data.ArchCEREScript.Type
       Data.ArchCEREScript.Type.Show
+      Data.ArchCEREScript.Util
       Parser.ArchCEREScript
       Parser.ArchCEREScript.Model.Value
       Parser.ArchCEREScript.Model.VariablePlace
