@@ -3,7 +3,6 @@ module Data.ArchCEREScript.Model.VariableIndex where
 
 import TextShow as TS
 
-import Data.ArchCEREScript.Model.VariablePlace
 import Data.ArchCEREScript.Show.Util
 import Data.ArchCEREScript.Type
 import Data.ArchCEREScript.Model.VariablePosition

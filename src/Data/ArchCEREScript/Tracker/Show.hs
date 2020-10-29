@@ -4,7 +4,7 @@ module Data.ArchCEREScript.Tracker.Show where
 import TextShow
 
 import Data.ArchCEREScript.Tracker
-import Data.ArchCEREScript.Type
+import Data.ArchCEREScript.Type ()
 import Data.ArchCEREScript.Show.Util
 
 
