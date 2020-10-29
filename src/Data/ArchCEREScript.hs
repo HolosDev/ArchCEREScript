@@ -41,80 +41,77 @@ data ArchCEREScript eis vP vi vc v vp vt co
 
 -------------------------------- # ArchCERES # --------------------------------
 data ArchCERES eis vP vi vc v vp vt co
-  -- | No-Op
-  = CRSNoop
-  -- | Break
-  | CRSBreak (Maybe LoopLabel)
-  -- | Clear Storage of vp
-  | CRSClearVariable    vp
-  -- | Initialize Variable at VP@A with Value of VP@B
-  | CRSInitVariable     (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Initialize Variable at Storage of vp with Value of VP@B
-  | CRSInitVariableAt   vp                        (vP eis vi vc v vp vt co)
-  -- | Check existence of Variable at VP@A and store the result to VP@B
-  | CRSCheckVariable    (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Delete Variable at VP@A
-  | CRSDeleteVariable   (vP eis vi vc v vp vt co)
-  -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue1     co                        (vP eis vi vc v vp vt co)
-  -- | Modify Value of VP@A by CERESOperator with Value of VP@B
-  | CRSModifyValue2     co                        (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Modify Value of VP@A by CERESOperator with Value of VP@B and VP@C
-  | CRSModifyValue3     co                        (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Modify Value of VP@A by CERESOperator with Value of VP@B, VP@C and VP@D
-  | CRSModifyValue4     co                        (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Copy Value of VP@B to Variable at VP@A
-  | CRSCopyValue        (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Convert Value of VP@A as like as a given ValueType
-  | CRSConvertValue     (vP eis vi vc v vp vt co) vt
-  -- | Convert Value of VP@A as like as ValueType of VP@B
-  | CRSConvertValueBy   (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Convert Value of VP@A with a given rule of VP@B
-  | CRSConvertValueWith (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Replace StrValue of VP@A with indicated Variables in the StrValue
-  | CRSReplaceText      (vP eis vi vc v vp vt co)
-  -- | Replace StrValue of VP@A with indicated Variables in the StrValue and store the result to VP@B
-  | CRSReplaceTextTo    (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Replace StrValue of VP@B in StrValue of VP@A as StrValue of VP@C
-  | CRSReplaceTextBy    (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Replace StrValue of VP@B in StrValue of VP@A as StrValue of VP@C and store the result to VP@D
-  | CRSReplaceTextByTo  (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Read & Parse StrValue of VP@A as PtrValue and store the result to VP@B
-  | CRSGetPointer       (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Generate Random Value of VP@A as a ValueType
-  | CRSSetPointer       (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Generate Random Value of VP@A as a given ValueType
-  | CRSRandom           (vP eis vi vc v vp vt co) vt
-  -- | Generate Random Value of VP@A as a ValueType of VP@B
-  | CRSRandomBy         (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Generate Random Value of VP@A as a given ValueType with parameters vpC, vpD, and vpE
-  | CRSRandomWith       (vP eis vi vc v vp vt co) vt (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Generate Random Value of VP@A as a ValueType of VP@B with parameters vpC, vpD, and vpE
-  | CRSRandomWithBy     (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Read & Parse StrValue of VP@A as a script and store the script to VP@B
-  | CRSParseScript      (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | Log a content of VP@B to VP@B
-  | CRSLog              (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To0
-  | CRSTo0 CHeader
-  -- | To1 passes one Value of VP@A
-  | CRSTo1 CHeader (vP eis vi vc v vp vt co)
-  -- | To2 passes one Value of VP@A and VP@B
-  | CRSTo2 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To3 passes one Value of VP@A, VP@B and VP@C
-  | CRSTo3 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To4 passes one Value of VP@A, VP@B, VP@C and VP@D
-  | CRSTo4 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To5 passes one Value of VP@A, VP@B, VP@C, VP@D and VP@E
-  | CRSTo5 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To6 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E and VP@F
-  | CRSTo6 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To7 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F and VP@G
-  | CRSTo7 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
-  | CRSTo8 CHeader (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co) (vP eis vi vc v vp vt co)
-  -- | To8 passes one Value of VP@A, VP@B, VP@C and VP@D, VP@E, VP@F, VP@G and VP@H
-  | CRSToList CHeader (Array (vP eis vi vc v vp vt co))
-  -- | Ext0
-  | CRSExt eis
+  = -- | No-Op
+    CRSNoop
+  | -- | Break
+    CRSBreak
+      {breakLabel :: Maybe LoopLabel}
+  | -- | Clear Storage of vp
+    CRSClearVariables
+      {variablePlace :: vp}
+  | -- | Initialize Variable at wVP1
+    CRSInitVariable
+      {wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Initialize Variable at Storage of vp with Value of rVP1
+    CRSInitVariableAt
+      {variablePlace :: vp, wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Initialize Variable at wVP1 with Value of rVP1
+    CRSInitVariableBy
+      {wVP1 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co}
+  | -- | Check existence of Variable at rVP1
+    CRSCheckVariable
+      {rVP1 :: vP eis vi vc v vp vt co}
+  | -- | Delete Variable at wVP1
+    CRSDeleteVariable
+      {wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Modify no Value, but do CERESOperator
+    CRSDo
+      {operator :: co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1
+    CRSModifyValue
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1
+    CRSModifyValue1
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1 and rVP2
+    CRSModifyValue2
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1, rVP1 and rVP3
+    CRSModifyValue3
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co, rVP3 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1, rVP1, rVP3 and rVP4
+    CRSModifyValue4
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co, rVP3 :: vP eis vi vc v vp vt co, rVP4 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 and wVP2 by CERESOperator
+    CRSModifyBothValue
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 and wVP2 by CERESOperator with Value of rVP1
+    CRSModifyBothValue1
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 and wVP2 by CERESOperator with Value of rVP1 and rVP2
+    CRSModifyBothValue2
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 and wVP2 by CERESOperator with Value of rVP1, rVP2 and rVP3
+    CRSModifyBothValue3
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co, rVP3 :: vP eis vi vc v vp vt co}
+  | -- | Modify Value of wVP1 by CERESOperator with Value of rVP1, rVP1, rVP3 and rVP4
+    CRSModifyBothValue4
+      {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co, rVP3 :: vP eis vi vc v vp vt co, rVP4 :: vP eis vi vc v vp vt co}
+  | -- | Modify Values of wVPs by CERESOperator with rVPs
+    CRSModifyBothValues
+      {operator :: co, wVPs :: Array (vP eis vi vc v vp vt co), rVPs :: Array (vP eis vi vc v vp vt co)}
+  | -- | Copy Value of rVP1 to Variable at wVP1
+    CRSCopyValue
+      {rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Convert Value of wVP1 as like as a given ValueType
+    CRSConvertValue
+      {wVP1 :: vP eis vi vc v vp vt co, valueType :: vt}
+  | -- | Generate Random Value at wVP1 as a given ValueType
+    CRSRandom
+      {wVP1 :: vP eis vi vc v vp vt co, valueType :: vt}
+  | -- | Log a content of rVP1 to wVP1
+    CRSLog
+      {rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Ext
+    CRSExt {eis :: eis}
   deriving (Eq, Ord)

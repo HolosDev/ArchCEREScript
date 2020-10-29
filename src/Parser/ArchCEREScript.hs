@@ -67,67 +67,65 @@ parseArchCERES :: (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis 
 parseArchCERES parsers@(parseEISWith, parseVPWith, parseVIWith, parseVCWith, parseVWith, parseVP, parseVT, parseCO) =
   choice
     [ parseNoop
-    , parseClearVariable
+    , parseClearVariables
     , parseInitVariable
     , parseInitVariableAt
-    {-
-    , parseCheckVariable
-    , parseDeleteVariable
-    , parseModifyValue1
-    , parseModifyValue2
-    , parseModifyValue3
-    , parseModifyValue4
-    , parseCopyValue
-    , parseConvertValue
-    , parseConvertValueBy
-    , parseConvertValueWith
-    , parseReplaceText
-    , parseReplaceTextTo
-    , parseReplaceTextBy
-    , parseReplaceTextByTo
-    , parseGetPointer
-    , parseSetPointer
-    , parseRandom
-    , parseRandomBy
-    , parseRandomWith
-    , parseRandomWithBy
-    , parseParseScript
-    , parseLog
-    , parseTo0
-    , parseTo1
-    , parseTo2
-    , parseTo3
-    , parseTo4
-    , parseTo5
-    , parseTo6
-    , parseTo7
-    , parseTo8
-    , parseToList
-    -}
-    , parseExt
+    , {-
+      , parseCheckVariable
+      , parseDeleteVariable
+      , parseModifyValue1
+      , parseModifyValue2
+      , parseModifyValue3
+      , parseModifyValue4
+      , parseCopyValue
+      , parseConvertValue
+      , parseConvertValueBy
+      , parseConvertValueWith
+      , parseReplaceText
+      , parseReplaceTextTo
+      , parseReplaceTextBy
+      , parseReplaceTextByTo
+      , parseGetPointer
+      , parseSetPointer
+      , parseRandom
+      , parseRandomBy
+      , parseRandomWith
+      , parseRandomWithBy
+      , parseParseScript
+      , parseLog
+      , parseTo0
+      , parseTo1
+      , parseTo2
+      , parseTo3
+      , parseTo4
+      , parseTo5
+      , parseTo6
+      , parseTo7
+      , parseTo8
+      , parseToList
+      -}
+      parseExt
     ]
  where
   parseNoop = do
     string "Noop"
     return CRSNoop
-  parseClearVariable = do
-    string "ClearVariable"
+  parseClearVariables = do
+    string "ClearVariables"
     consumeASpace
     vp <- parseVP
-    return $ CRSClearVariable vp
+    return $ CRSClearVariables vp
   parseInitVariable = do
     string "InitVariable"
     consumeASpace
-    vP1 <- parseVPWith
-    consumeASpace
-    vP2 <- parseVPWith
-    return $ CRSInitVariable vP1 vP2
+    wVP1 <- parseVPWith
+    return $ CRSInitVariable wVP1
   parseInitVariableAt = do
     string ""
     vp <- parseVP
     consumeASpace
-    vP <- parseVPWith
-    return $ CRSInitVariableAt vp vP
+    wVP1 <- parseVPWith
+    return $ CRSInitVariableAt vp wVP1
   {-
   parseCheckVariable = do
     string ""
@@ -226,6 +224,8 @@ parseArchCERES parsers@(parseEISWith, parseVPWith, parseVIWith, parseVCWith, par
     string ""
     return CRS
   -}
-  parseExt = return CRSNoop -- Use parseEIS
+  parseExt = do
+    eis <- parseEISWith
+    return $ CRSExt eis
   consumeASpace :: Parser ()
   consumeASpace = void (char ' ')

@@ -53,7 +53,7 @@ library
       Nothing
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings TypeInType
+  default-extensions: OverloadedStrings RecordWildCards TypeInType
   build-depends:
       base >=4.7 && <5
     , bytestring
@@ -76,7 +76,7 @@ test-suite Test-Implementation
   hs-source-dirs:
       test
       tests/Implementation
-  default-extensions: OverloadedStrings TypeInType TemplateHaskell
+  default-extensions: OverloadedStrings RecordWildCards TypeInType TemplateHaskell
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       ArchCEREScript
@@ -109,7 +109,7 @@ test-suite Test-Spec
   hs-source-dirs:
       test
       tests/Spec
-  default-extensions: OverloadedStrings TypeInType TemplateHaskell
+  default-extensions: OverloadedStrings RecordWildCards TypeInType TemplateHaskell
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       ArchCEREScript

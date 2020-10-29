@@ -5,8 +5,8 @@ import TextShow ()
 import TextShow as TS
 
 
-import Data.ArchCEREScript.Show.Util as ACS
 import Data.ArchCEREScript
+import Data.ArchCEREScript.Show.Util as ACS
 
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => Show (ArchCEREScript eis vP vi vc v vp vt co) where
@@ -26,72 +26,48 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vP vi vc v vp vt co) where
   showb CRSNoop = fromText "Noop"
-  showb (CRSBreak mLabel) =
-    fromText "Break" <> maybe blank (\l -> singleton '@' <> wrapSquareBar (fromText l)) mLabel
-  showb (CRSInitVariable vpA vpB) =
-    showbCS2 "InitVariable" vpA vpB
-  showb (CRSCheckVariable vpA vpB) =
-    showbCS2 "CheckVariable" vpA vpB
-  showb (CRSDeleteVariable vp) =
-    showbCS1 "DeleteVariable" vp
-  showb (CRSModifyValue1 vpA cOper) =
-    showbCS2 "ModifyValue1" vpA cOper
-  showb (CRSModifyValue2 vpA vpB cOper) =
-    showbCS3 "ModifyValue2" vpA vpB cOper
-  showb (CRSModifyValue3 vpA vpB vpC cOper) =
-    showbCS4 "ModifyValue3" vpA vpB vpC cOper
-  showb (CRSModifyValue4 vpA vpB vpC vpD cOper) =
-    showbCS5 "ModifyValue4" vpA vpB vpC vpD cOper
-  showb (CRSCopyValue vpA vpB) =
-    showbCS2 "CopyValue" vpA vpB
-  showb (CRSConvertValue vp vType) =
-    showbCS2 "ConvertValue" vp vType
-  showb (CRSConvertValueBy vpA vpB) =
-    showbCS2 "ConvertValueBy" vpA vpB
-  showb (CRSConvertValueWith vpA vpB) =
-    showbCS2 "ConvertValueWith" vpA vpB
-  showb (CRSReplaceText vp) =
-    showbCS1 "ReplaceText" vp
-  showb (CRSReplaceTextTo vpA vpB) =
-    showbCS2 "ReplaceTextTo" vpA vpB
-  showb (CRSReplaceTextBy vpA vpB vpC) =
-    showbCS3 "ReplaceTextBy" vpA vpB vpC
-  showb (CRSReplaceTextByTo vpA vpB vpC vpD) =
-    showbCS4 "ReplaceTextByTo" vpA vpB vpC vpD
-  showb (CRSGetPointer vpA vpB) =
-    showbCS2 "GetPointer" vpA vpB
-  showb (CRSSetPointer vpA vpB) =
-    showbCS2 "SetPointer" vpA vpB
-  showb (CRSRandom vp vType) =
-    showbCS2 "Random" vp vType
-  showb (CRSRandomBy vpA vpB) =
-    showbCS2 "RandomBy" vpA vpB
-  showb (CRSRandomWith vpA vtB vpC vpD vpE) =
-    showbCS5 "RandomWith" vpA vtB vpC vpD vpE
-  showb (CRSRandomWithBy vpA vpB vpC vpD vpE) =
-    showbCS5 "RandomWithBy" vpA vpB vpC vpD vpE
-  showb (CRSParseScript vpA vpB) =
-    showbCS2 "ParseScript" vpA vpB
-  showb (CRSLog vpA vpB) =
-    showbCS2 "Log" vpA vpB
-  showb (CRSTo0 cH) =
-    showbCSC0 "To0" cH
-  showb (CRSTo1 cH vpA) =
-    showbCSC1 "To1" cH vpA
-  showb (CRSTo2 cH vpA vpB) =
-    showbCSC2 "To2" cH vpA vpB
-  showb (CRSTo3 cH vpA vpB vpC) =
-    showbCSC3 "To3" cH vpA vpB vpC
-  showb (CRSTo4 cH vpA vpB vpC vpD) =
-    showbCSC4 "To4" cH vpA vpB vpC vpD
-  showb (CRSTo5 cH vpA vpB vpC vpD vpE) =
-    showbCSC5 "To5" cH vpA vpB vpC vpD vpE
-  showb (CRSTo6 cH vpA vpB vpC vpD vpE vpF) =
-    showbCSC6 "To6" cH vpA vpB vpC vpD vpE vpF
-  showb (CRSTo7 cH vpA vpB vpC vpD vpE vpF vpG) =
-    showbCSC7 "To7" cH vpA vpB vpC vpD vpE vpF vpG
-  showb (CRSTo8 cH vpA vpB vpC vpD vpE vpF vpG vpH) =
-    showbCSC8 "To8" cH vpA vpB vpC vpD vpE vpF vpG vpH
-  showb (CRSToList cH vpArray) =
-    fromLazyText "ToList" <> showb cH <> wrapDoubleSquare (wrapSpace (showbInternalArrayWith vpArray (fromText " || ")))
-  showb (CRSExt ei) = showb ei
+  showb CRSBreak{..} =
+    fromText "Break" <> maybe blank (\l -> singleton '@' <> wrapSquareBar (fromText l)) breakLabel
+  showb CRSClearVariables{..} =
+    showbCS1 "ClearVariables" variablePlace
+  showb CRSInitVariable{..} =
+    showbCS1 "InitVariable" wVP1
+  showb CRSInitVariableAt{..} =
+    showbCS2 "InitVariableAt" variablePlace wVP1
+  showb CRSInitVariableBy{..} =
+    showbCS2 "InitVariableBy" wVP1 rVP1
+  showb CRSCheckVariable{..} =
+    showbCS1 "CheckVariable" rVP1
+  showb CRSDeleteVariable{..} =
+    showbCS1 "DeleteVariable" wVP1
+  showb CRSDo{..} =
+    showbCS1 "Do" operator
+  showb CRSModifyValue{..} =
+    showbCS2 "ModifyValue" operator wVP1
+  showb CRSModifyValue1{..} =
+    showbCS3 "ModifyValue1" operator wVP1 rVP1
+  showb CRSModifyValue2{..} =
+    showbCS4 "ModifyValue2" operator wVP1 rVP1 rVP2
+  showb CRSModifyValue3{..} =
+    showbCS5 "ModifyValue3" operator wVP1 rVP1 rVP2 rVP3
+  showb CRSModifyValue4{..} =
+    showbCS6 "ModifyValue4" operator wVP1 rVP1 rVP2 rVP3 rVP4
+  showb CRSModifyBothValue{..} =
+    showbCS3 "ModifyBothValue" operator wVP1 wVP2
+  showb CRSModifyBothValue1{..} =
+    showbCS4 "ModifyBothValue1" operator wVP1 wVP2 rVP1
+  showb CRSModifyBothValue2{..} =
+    showbCS5 "ModifyBothValue2" operator wVP1 wVP2 rVP1 rVP2
+  showb CRSModifyBothValue3{..} =
+    showbCS6 "ModifyBothValue3" operator wVP1 wVP2 rVP1 rVP2 rVP3
+  showb CRSModifyBothValue4{..} =
+    showbCS7 "ModifyBothValue4" operator wVP1 wVP2 rVP1 rVP2 rVP3 rVP4
+  showb CRSCopyValue{..} =
+    showbCS2 "CopyValue" rVP1 wVP1
+  showb CRSConvertValue{..} =
+    showbCS2 "ConvertValue" wVP1 valueType
+  showb CRSRandom{..} =
+    showbCS2 "Random" wVP1 valueType
+  showb CRSLog{..} =
+    showbCS2 "Log" rVP1 wVP1
+  showb CRSExt{..} = showb eis
