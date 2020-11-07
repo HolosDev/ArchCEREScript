@@ -26,6 +26,12 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
 
 instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc v vp vt co), TextShow (vc eis v vp co), TextShow (v eis vp co), TextShow vp, TextShow vt, TextShow co) => TextShow (ArchCERES eis vP vi vc v vp vt co) where
   showb CRSNoop = fromText "Noop"
+  showb CRSRun{..}=
+    showbCS1 "Run" rVP1
+  showb CRSReturn{..}=
+    showbCS2 "Return" rVP1 wVP1
+  showb CRSError{..}=
+    showbCS3 "Error" operator rVP1 wVP1
   showb CRSBreak{..} =
     fromText "Break" <> maybe blank (\l -> singleton '@' <> wrapSquareBar (fromText l)) breakLabel
   showb CRSClearVariables{..} =
@@ -62,6 +68,8 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
     showbCS6 "ModifyBothValue3" operator wVP1 wVP2 rVP1 rVP2 rVP3
   showb CRSModifyBothValue4{..} =
     showbCS7 "ModifyBothValue4" operator wVP1 wVP2 rVP1 rVP2 rVP3 rVP4
+  showb CRSModifyValues{..} =
+    showbCS3 "ModifyValues" operator (wrapDoubleSquare (showbInternalArrayWith wVPs comma)) (wrapDoubleSquare (showbInternalArrayWith rVPs comma))
   showb CRSCopyValue{..} =
     showbCS2 "CopyValue" rVP1 wVP1
   showb CRSConvertValue{..} =

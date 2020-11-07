@@ -43,6 +43,15 @@ data ArchCEREScript eis vP vi vc v vp vt co
 data ArchCERES eis vP vi vc v vp vt co
   = -- | No-Op
     CRSNoop
+  | -- | Run Script at rVP1
+    CRSRun
+      {rVP1 :: vP eis vi vc v vp vt co}
+  | -- | Return a content of rVP1 to wVP1
+    CRSReturn
+      {rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
+  | -- | Claims error with a content of rVP1 to wVP1
+    CRSError
+      {operator :: co, rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
   | -- | Break
     CRSBreak
       {breakLabel :: Maybe LoopLabel}
@@ -98,7 +107,7 @@ data ArchCERES eis vP vi vc v vp vt co
     CRSModifyBothValue4
       {operator :: co, wVP1 :: vP eis vi vc v vp vt co, wVP2 :: vP eis vi vc v vp vt co, rVP1 :: vP eis vi vc v vp vt co, rVP2 :: vP eis vi vc v vp vt co, rVP3 :: vP eis vi vc v vp vt co, rVP4 :: vP eis vi vc v vp vt co}
   | -- | Modify Values of wVPs by CERESOperator with rVPs
-    CRSModifyBothValues
+    CRSModifyValues
       {operator :: co, wVPs :: Array (vP eis vi vc v vp vt co), rVPs :: Array (vP eis vi vc v vp vt co)}
   | -- | Copy Value of rVP1 to Variable at wVP1
     CRSCopyValue

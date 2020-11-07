@@ -11,12 +11,7 @@ import Parser.Util
 
 
 parseArchCEREScript :: Ord (v eis vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
-parseArchCEREScript = parseControlInstruction
-
--- (try (parseControlInstruction parsers)) <|> (parseManipulationInstruction parsers)
-
-parseControlInstruction :: Ord (v eis vp co) => (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt, Parser co) -> Parser (ArchCEREScript eis vP vi vc v vp vt co)
-parseControlInstruction parsers@(_, _, _, _, parseValueWith, _, _, _) = do
+parseArchCEREScript parsers@(_, _, _, _, parseValueWith, _, _, _) = do
   void (char 'S')
   choice [parseSHaveNext, parseSEnd]
  where
@@ -42,7 +37,7 @@ parseControlInstruction parsers@(_, _, _, _, parseValueWith, _, _, _) = do
     loopLabel <- parseLabel
     return $ SLoop loopCondition loopScript loopLabel
    where
-    parseLabel = undefined
+    parseLabel = error "[ERROR]<parseArchCEREScript:=:parseLabel> Not yet implemented"
   parseSCase = do
     void (string "Case<")
     branchCondition <- parseArchCEREScript parsers
@@ -59,57 +54,48 @@ parseControlInstruction parsers@(_, _, _, _, parseValueWith, _, _, _) = do
     string "End."
     return SEnd
 
-parseManipulationInstruction :: (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vP vi vc v vp vt co)
-parseManipulationInstruction = parseArchCERES
 
 -- TODO: Not yet implemented
 parseArchCERES :: (Parser eis, Parser (vP eis vi vc v vp vt co), Parser (vi eis vc v vp vt co), Parser (vc eis v vp co), Parser (v eis vp co), Parser vp, Parser vt, Parser co) -> Parser (ArchCERES eis vP vi vc v vp vt co)
 parseArchCERES parsers@(parseEISWith, parseVPWith, parseVIWith, parseVCWith, parseVWith, parseVP, parseVT, parseCO) =
   choice
     [ parseNoop
+    , parseRun
+    , parseReturn
+    , parseError
+    , parseBreak
     , parseClearVariables
     , parseInitVariable
     , parseInitVariableAt
-    , {-
-      , parseCheckVariable
-      , parseDeleteVariable
-      , parseModifyValue1
-      , parseModifyValue2
-      , parseModifyValue3
-      , parseModifyValue4
-      , parseCopyValue
-      , parseConvertValue
-      , parseConvertValueBy
-      , parseConvertValueWith
-      , parseReplaceText
-      , parseReplaceTextTo
-      , parseReplaceTextBy
-      , parseReplaceTextByTo
-      , parseGetPointer
-      , parseSetPointer
-      , parseRandom
-      , parseRandomBy
-      , parseRandomWith
-      , parseRandomWithBy
-      , parseParseScript
-      , parseLog
-      , parseTo0
-      , parseTo1
-      , parseTo2
-      , parseTo3
-      , parseTo4
-      , parseTo5
-      , parseTo6
-      , parseTo7
-      , parseTo8
-      , parseToList
-      -}
+    , parseInitVariableBy
+    , parseCheckVariable
+    , parseDeleteVariable
+    , parseDo
+    , parseModifyValue
+    , parseModifyValue1
+    , parseModifyValue2
+    , parseModifyValue3
+    , parseModifyValue4
+    , parseModifyBothValue
+    , parseModifyBothValue1
+    , parseModifyBothValue2
+    , parseModifyBothValue3
+    , parseModifyBothValue4
+    , parseModifyValues
+    , parseCopyValue
+    , parseConvertValue
+    , parseRandom
+    , parseLog
       parseExt
     ]
  where
   parseNoop = do
     string "Noop"
     return CRSNoop
+  parseRun = error "[ERROR]<parseArchCERES:=:parseRun> Not yet implemented"
+  parseReturn = error "[ERROR]<parseArchCERES:=:parseReturn> Not yet implemented"
+  parseError = error "[ERROR]<parseArchCERES:=:parseError> Not yet implemented"
+  parseBreak = error "[ERROR]<parseArchCERES:=:parseBreak> Not yet implemented"
   parseClearVariables = do
     string "ClearVariables"
     consumeASpace
@@ -126,104 +112,25 @@ parseArchCERES parsers@(parseEISWith, parseVPWith, parseVIWith, parseVCWith, par
     consumeASpace
     wVP1 <- parseVPWith
     return $ CRSInitVariableAt vp wVP1
-  {-
-  parseCheckVariable = do
-    string ""
-    return CRS
-  parseDeleteVariable = do
-    string ""
-    return CRS
-  parseModifyValue1 = do
-    string ""
-    return CRS
-  parseModifyValue2 = do
-    string ""
-    return CRS
-  parseModifyValue3 = do
-    string ""
-    return CRS
-  parseModifyValue4 = do
-    string ""
-    return CRS
-  parseCopyValue = do
-    string ""
-    return CRS
-  parseConvertValue = do
-    string ""
-    return CRS
-  parseConvertValueBy = do
-    string ""
-    return CRS
-  parseConvertValueWith = do
-    string ""
-    return CRS
-  parseReplaceText = do
-    string ""
-    return CRS
-  parseReplaceTextTo = do
-    string ""
-    return CRS
-  parseReplaceTextBy = do
-    string ""
-    return CRS
-  parseReplaceTextByTo = do
-    string ""
-    return CRS
-  parseGetPointer = do
-    string ""
-    return CRS
-  parseSetPointer = do
-    string ""
-    return CRS
-  parseRandom = do
-    string ""
-    return CRS
-  parseRandomBy = do
-    string ""
-    return CRS
-  parseRandomWith = do
-    string ""
-    return CRS
-  parseRandomWithBy = do
-    string ""
-    return CRS
-  parseParseScript = do
-    string ""
-    return CRS
-  parseLog = do
-    string ""
-    return CRS
-  parseTo0 = do
-    string ""
-    return CRS
-  parseTo1 = do
-    string ""
-    return CRS
-  parseTo2 = do
-    string ""
-    return CRS
-  parseTo3 = do
-    string ""
-    return CRS
-  parseTo4 = do
-    string ""
-    return CRS
-  parseTo5 = do
-    string ""
-    return CRS
-  parseTo6 = do
-    string ""
-    return CRS
-  parseTo7 = do
-    string ""
-    return CRS
-  parseTo8 = do
-    string ""
-    return CRS
-  parseToList = do
-    string ""
-    return CRS
-  -}
+  parseInitVariableBy = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseCheckVariable = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseDeleteVariable = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseDo = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValue = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValue1 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValue2 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValue3 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValue4 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyBothValue = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyBothValue1 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyBothValue2 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyBothValue3 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyBothValue4 = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseModifyValues = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseCopyValue = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseConvertValue = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseRandom = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
+  parseLog = error "[ERROR]<parseArchCERES:=:parse> Not yet implemented"
   parseExt = do
     eis <- parseEISWith
     return $ CRSExt eis
