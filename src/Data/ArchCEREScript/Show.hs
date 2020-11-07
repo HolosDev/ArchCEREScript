@@ -73,9 +73,9 @@ instance (TextShow eis, TextShow (vP eis vi vc v vp vt co), TextShow (vi eis vc 
   showb CRSCopyValue{..} =
     showbCS2 "CopyValue" rVP1 wVP1
   showb CRSConvertValue{..} =
-    showbCS2 "ConvertValue" wVP1 valueType
+    showbCS2 "ConvertValue" wVP1 vType
   showb CRSRandom{..} =
-    showbCS2 "Random" wVP1 valueType
+    showbCS2 "Random" wVP1 vType
   showb CRSLog{..} =
     showbCS2 "Log" rVP1 wVP1
   showb CRSExt{..} = showb eis

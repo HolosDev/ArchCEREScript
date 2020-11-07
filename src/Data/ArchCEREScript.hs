@@ -114,10 +114,10 @@ data ArchCERES eis vP vi vc v vp vt co
       {rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
   | -- | Convert Value of wVP1 as like as a given ValueType
     CRSConvertValue
-      {wVP1 :: vP eis vi vc v vp vt co, valueType :: vt}
+      {wVP1 :: vP eis vi vc v vp vt co, vType :: vt}
   | -- | Generate Random Value at wVP1 as a given ValueType
     CRSRandom
-      {wVP1 :: vP eis vi vc v vp vt co, valueType :: vt}
+      {wVP1 :: vP eis vi vc v vp vt co, vType :: vt}
   | -- | Log a content of rVP1 to wVP1
     CRSLog
       {rVP1 :: vP eis vi vc v vp vt co, wVP1 :: vP eis vi vc v vp vt co}
