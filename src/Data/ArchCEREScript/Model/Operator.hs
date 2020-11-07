@@ -8,7 +8,17 @@ import Data.ArchCEREScript.Type (Operator)
 
 
 data CERESOperator
-  = COAAdd
+  = COVaChkTo
+  | COVaGetPtr
+  | COVaSetPtr
+  | COVa Operator -- Custom Variable Operator
+  | COVlCnvBy
+  | COVlRandomBy
+  | COVlRandomWith
+  | COVlRandomWithBy
+  | COVlParse
+  | COVl Operator -- Custom Value Operator
+  | COAAdd
   | COAMul
   | COASub
   | COADiv
@@ -29,6 +39,9 @@ data CERESOperator
   | COTConcat
   | COTInter
   | COTReplace
+  | COTReplaceTo
+  | COTReplaceBy
+  | COTReplaceByTo
   | COTReverse
   | COTJustify
   | COTLength
