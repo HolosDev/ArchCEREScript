@@ -15,6 +15,9 @@ data VariablePlace
   | AtNTime
   | AtDict
   | AtNDict
+  | AtSDict
+  | AtFDict
+  | AtSITable
   | AtVars
   | AtNVars
   | AtLVars
