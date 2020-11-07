@@ -1,5 +1,7 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
+
 module Data.ArchCEREScript.Model.EIS where
 
 
@@ -20,7 +22,6 @@ type MVPosition = VariablePosition MEIS VariableIndex ValueContainer Value Varia
 type MVIndex = VariableIndex MEIS ValueContainer Value VariablePlace ValueType CERESOperator
 type MVContainer = ValueContainer MEIS Value VariablePlace CERESOperator
 type MV = Value MEIS VariablePlace CERESOperator
-
 
 data MEIS
   = MEIS0
